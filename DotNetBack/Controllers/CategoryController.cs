@@ -15,5 +15,17 @@ namespace DotNetBack.Controllers
         {
             _categoryRepository = categoryRepository;
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCategory([FromBody] Category category)
+        {
+            if (category == null)
+            {
+                return BadRequest("Category is null.");
+            }
+
+            var categoryId = await _categoryRepository.AddCategoryAsync(category);
+            return Ok(new { CategoryId = categoryId });
+        }
     }
 }
