@@ -1,4 +1,90 @@
-﻿
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using DotNetBack.Models;
+using DotNetBack.Repositories;
+
+namespace DotNetBack.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CategoryController : ControllerBase
+    {
+        private readonly ICategoryRepository _categoryRepository;
+
+        public CategoryController(ICategoryRepository categoryRepository)
+        {
+            _categoryRepository = categoryRepository;
+        }
+
+        // GET: /api/category/user/:user_id
+        [HttpGet("user/{user_id}")]
+        public async Task<IActionResult> GetUserCategories(int user_id)
+        {
+            var categories = await _categoryRepository.GetUserCategoriesAsync(user_id);
+            return Ok(categories);
+        }
+
+        // GET: /api/category/find/:query
+        [HttpGet("find/{query}")]
+        public async Task<IActionResult> FindCategories(string query)
+        {
+            var categories = await _categoryRepository.FindCategoriesAsync(query);
+            return Ok(categories);
+        }
+
+        // POST: /api/category
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory([FromBody] Category category)
+        {
+            if (category == null)
+            {
+                return BadRequest("Category is null.");
+            }
+
+            var categoryId = await _categoryRepository.AddCategoryAsync(category);
+            return Ok(new { CategoryId = categoryId });
+        }
+
+        // PUT: /api/category
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory([FromBody] Category category)
+        {
+            if (category == null)
+            {
+                return BadRequest("Category is null.");
+            }
+
+            await _categoryRepository.UpdateCategoryAsync(category);
+            return Ok();
+        }
+
+        // DELETE: /api/category
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCategory(int category_id)
+        {
+            await _categoryRepository.DeleteCategoryAsync(category_id);
+            return Ok();
+        }
+
+        // PUT: /api/category/reset-progress/:category_id
+        [HttpPut("reset-progress/{category_id}")]
+        public async Task<IActionResult> ResetProgress(int category_id)
+        {
+            await _categoryRepository.ResetProgressAsync(category_id);
+            return Ok();
+        }
+
+        // PUT: /api/category/clear-content/:category_id
+        [HttpPut("clear-content/{category_id}")]
+        public async Task<IActionResult> ClearContent(int category_id)
+        {
+            await _categoryRepository.ClearContentAsync(category_id);
+            return Ok();
+        }
+    }
+}
+
+/*
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using DotNetBack.Models;
@@ -205,3 +291,4 @@ namespace DotNetBack.Controllers
 
     }
 }
+*/
