@@ -22,16 +22,18 @@ namespace DotNetBack.Repositories
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 await connection.OpenAsync();
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO Message (user_id, message, admin_id) VALUES (@userId, @message, @adminId)", connection))
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO Message (user_id, message, admin_id, is_shown) VALUES (@userId, @message, @adminId, @isShown)", connection))
                 {
                     cmd.Parameters.AddWithValue("@userId", message.UserId);
                     cmd.Parameters.AddWithValue("@message", message.Text);
                     cmd.Parameters.AddWithValue("@adminId", message.AdminId);
+                    cmd.Parameters.AddWithValue("@isShown", false);
 
                     return await cmd.ExecuteNonQueryAsync();
                 }
             }
         }
+
 
         public async Task<List<Message>> GetUnreadMessagesAsync(int userId)
         {
