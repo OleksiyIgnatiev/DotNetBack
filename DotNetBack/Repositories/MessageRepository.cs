@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using DotNetBack.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace DotNetBack.Repositories
 {
@@ -16,48 +16,46 @@ namespace DotNetBack.Repositories
             _configuration = configuration;
         }
 
-        public async Task AddMessageAsync(Message message)
+        public async Task<int> CreateMessageAsync(Message message)
         {
-            string query = "INSERT INTO Messages (user_id, message, admin_id, is_shown) " +
-                "VALUES (@user_id, @message, @admin_id, @is_shown)";
-            using (SqlConnection myCon = new SqlConnection(_configuration.GetConnectionString("ppDBCon")))
+            string connectionString = _configuration.GetConnectionString("ppDBCon");
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand myCommand = new SqlCommand(query, myCon);
-                myCommand.Parameters.AddWithValue("@user_id", message.UserId);
-                myCommand.Parameters.AddWithValue("@message", message.Text);
-                myCommand.Parameters.AddWithValue("@admin_id", message.AdminId);
-                myCommand.Parameters.AddWithValue("@is_shown", 0); // Установка значения is_shown в 0
+                await connection.OpenAsync();
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO Message (user_id, message, admin_id) VALUES (@userId, @message, @adminId)", connection))
+                {
+                    cmd.Parameters.AddWithValue("@userId", message.UserId);
+                    cmd.Parameters.AddWithValue("@message", message.Text);
+                    cmd.Parameters.AddWithValue("@adminId", message.AdminId);
 
-                myCon.Open();
-                await myCommand.ExecuteNonQueryAsync();
-                myCon.Close();
+                    return await cmd.ExecuteNonQueryAsync();
+                }
             }
         }
 
         public async Task<List<Message>> GetUnreadMessagesAsync(int userId)
         {
-            string query = "SELECT message_id, message, user_id, admin_id, is_shown FROM Messages WHERE user_id = @user_id AND is_shown = 0";
             List<Message> messages = new List<Message>();
-
-            using (SqlConnection myCon = new SqlConnection(_configuration.GetConnectionString("ppDBCon")))
+            string connectionString = _configuration.GetConnectionString("ppDBCon");
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand myCommand = new SqlCommand(query, myCon);
-                myCommand.Parameters.AddWithValue("@user_id", userId);
-
-                myCon.Open();
-                SqlDataReader myReader = await myCommand.ExecuteReaderAsync();
-                while (await myReader.ReadAsync())
+                await connection.OpenAsync();
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Message WHERE user_id = @userId AND is_shown = 0", connection))
                 {
-                    messages.Add(Message.Create(
-                        myReader.GetInt32(0),   // MessageId
-                        myReader.GetString(1),  // Message (Text)
-                        myReader.IsDBNull(2) ? (int?)null : myReader.GetInt32(2), // UserId
-                        myReader.IsDBNull(3) ? (int?)null : myReader.GetInt32(3), // AdminId
-                        myReader.GetBoolean(4)  // IsShown
-                    ));
+                    cmd.Parameters.AddWithValue("@userId", userId);
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            messages.Add(new Message
+                            {
+                                IsShown = (bool)reader["is_shown"],
+                                Text = reader["message"].ToString(),
+                                AdminId = (int)reader["admin_id"]
+                            });
+                        }
+                    }
                 }
-                myReader.Close();
-                myCon.Close();
             }
             return messages;
         }

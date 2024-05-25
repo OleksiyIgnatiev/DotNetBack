@@ -21,18 +21,18 @@ namespace DotNetBack.Models
 
         [JsonPropertyName("message")]
         [Required]
-        public string Text { get; private set; }
+        public string Text { get; set; }
 
         [JsonPropertyName("user_id")]
         [Required]
-        public int? UserId { get; private set; }
+        public int? UserId { get; set; }
 
         [JsonPropertyName("admin_id")]
         [Required]
-        public int? AdminId { get; private set; }
+        public int? AdminId { get; set; }
 
         [JsonIgnore]
-        public bool IsShown { get; private set; }
+        public bool IsShown { get; set; }
 
         public static Message Create(int messageId, string message, int? userId, int? adminId, bool isShown)
         {

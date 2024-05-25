@@ -16,12 +16,6 @@ namespace DotNetBack.Controllers
             _messageRepository = messageRepository;
         }
 
-        // POST: api/message
-        /// <summary>
-        /// Creates a new message for a user.
-        /// </summary>
-        /// <param name="message">The message to create.</param>
-        /// <returns>A status indicating whether the creation was successful.</returns>
         [HttpPost]
         public async Task<IActionResult> CreateMessage([FromBody] Message message)
         {
@@ -30,25 +24,14 @@ namespace DotNetBack.Controllers
                 return BadRequest("Message is null.");
             }
 
-            await _messageRepository.AddMessageAsync(message);
-            return Ok(new { Status = "Message created successfully" });
+            await _messageRepository.CreateMessageAsync(message);
+            return Ok();
         }
 
-        // GET: api/message/{userId}
-        /// <summary>
-        /// Gets unread messages for a user.
-        /// </summary>
-        /// <param name="userId">The ID of the user to get messages for.</param>
-        /// <returns>A list of unread messages.</returns>
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUnreadMessages(int userId)
         {
             var messages = await _messageRepository.GetUnreadMessagesAsync(userId);
-            if (messages == null || messages.Count == 0)
-            {
-                return NotFound("No unread messages found.");
-            }
-
             return Ok(messages);
         }
     }
