@@ -51,6 +51,7 @@ namespace DotNetBack.Repositories
                         {
                             messages.Add(new Message
                             {
+                                UserId = userId,
                                 IsShown = (bool)reader["is_shown"],
                                 Text = reader["message"].ToString(),
                                 AdminId = (int)reader["admin_id"]

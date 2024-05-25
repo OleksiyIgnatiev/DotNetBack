@@ -1,5 +1,7 @@
 using DotNetBack.Repositories;
 
+using DotNetBack.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
