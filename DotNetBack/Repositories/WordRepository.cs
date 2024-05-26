@@ -30,7 +30,9 @@ namespace DotNetBack.Repositories
 
             SqlConnection connection = GetConnection();
 
-            await connection.OpenAsync();
+            try
+            {
+                await connection.OpenAsync();
 
             var command = connection.CreateCommand();
 
@@ -53,6 +55,11 @@ namespace DotNetBack.Repositories
                 Word word = Word.Create(word_id, name, translation, category_id, img_link, repetition_num, repetition_date);
 
                 words.Add(word);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
 
 
@@ -61,50 +68,53 @@ namespace DotNetBack.Repositories
             return words;
         }
 
-        public async Task<int> DeleteWordAsync(int wordId)
+        public async Task DeleteWordAsync(int wordId)
         {
-            string sql = "DELETE FROM Word WHERE id = @Id";
+            string sql = $"DELETE FROM Word WHERE word_id = {wordId}";
 
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("ppDBCon")))
+            var connection = GetConnection();
+            try
             {
+                var command = connection.CreateCommand();
+                command.CommandText = sql;
+
                 await connection.OpenAsync();
 
-                var result = await connection.ExecuteAsync(sql, new { Id = wordId });
-
-                return result;
+                await command.ExecuteNonQueryAsync();
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
         }
 
-        public async Task<int> UpdateWordAsync(Word word)
+        public async Task UpdateWordAsync(Word word)
         {
             string sql = "UPDATE Word SET " +
-                         "name = @Name, " +
-                         "translation = @Translation, " +
-                         "category_id = @CategoryId, " +
-                         "img_link = @ImgLink, " +
-                         "repetition_num = @RepetitionNum, " +
-                         "repetition_date = @RepetitionDate " +
-                         "WHERE id = @Id";
+                         $"name = '{word.Name}', " +
+                         $"translation = '{word.Translation}', " +
+                         $"category_id = { word.CategoryId}', " +
+                         $"img_link = '{word.ImgLink}', " +
+                         $"repetition_num = {word.RepetitionNum}, " +
+                         $"repetition_date = '{word.RepetitionDate}' " +
+                         $"WHERE word_id = {word.WordId}";
 
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("ppDBCon")))
+            var connection = GetConnection();
+            try
             {
+                var command = connection.CreateCommand();
+                command.CommandText = sql;
+
                 await connection.OpenAsync();
 
-                var result = await connection.ExecuteAsync(sql, new
-                {
-                    Name = word.Name,
-                    Translation = word.Translation,
-                    CategoryId = word.CategoryId,
-                    ImgLink = word.ImgLink,
-                    RepetitionNum = word.RepetitionNum,
-                    RepetitionDate = word.RepetitionDate,
-                    Id = word.WordId
-                });
-
-                return result;
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
-
 
         public async Task<int> AddWordAsync(Word word)
         {

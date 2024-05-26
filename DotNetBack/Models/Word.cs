@@ -1,4 +1,7 @@
-﻿namespace DotNetBack.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace DotNetBack.Models
 {
     public class Word
     {
@@ -20,19 +23,29 @@
             RepetitionDate = repetitionDate;
         }
 
+        public Word() { }
+
+        [JsonIgnore]
         public int WordId { get; set; }
 
-        public string Name { get; private set; }
 
-        public string Translation { get; private set; }
+        [Required]
+        public string Name { get;  set; }
 
-        public int? CategoryId { get; private set; }
+        [Required]
+        public string Translation { get;  set; }
 
-        public string ImgLink { get; private set; }
+        [Required]
+        public int? CategoryId { get;  set; }
 
-        public int RepetitionNum { get; private set; }
+        [Required]
+        public string ImgLink { get;  set; }
 
-        public DateTime RepetitionDate { get; private set; }
+        [Required]
+        public int RepetitionNum { get;  set; }
+
+        [Required]
+        public DateTime RepetitionDate { get;  set; }
 
         public static Word Create(
             int wordId,
@@ -47,5 +60,3 @@
         }
     }
 }
-
-//akdnadhkjahdjhasdhakdhaskjd

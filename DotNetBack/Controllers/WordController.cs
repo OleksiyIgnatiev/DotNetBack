@@ -2,6 +2,7 @@
 using DotNetBack.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -43,6 +44,14 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> DeleteWord(int word_id)
         {
             wordRepository.DeleteWordAsync(word_id);
+            return Ok();
+        }
+
+        [HttpPut("word/{word_id}")]
+        public async Task<IActionResult> UpdateWord(int word_id, Word word)
+        {
+            word.WordId = word_id;
+            wordRepository.UpdateWordAsync(word);
             return Ok();
         }
     }
