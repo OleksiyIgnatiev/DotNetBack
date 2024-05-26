@@ -5,13 +5,13 @@ using DotNetBack.Repositories;
 
 namespace DotNetBack.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[Controller]")]
     [ApiController]
-    public class MessageController : ControllerBase
+    public class messageController : ControllerBase
     {
         private readonly IMessageRepository _messageRepository;
 
-        public MessageController(IMessageRepository messageRepository)
+        public messageController(IMessageRepository messageRepository)
         {
             _messageRepository = messageRepository;
         }
