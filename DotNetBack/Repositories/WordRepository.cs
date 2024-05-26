@@ -68,8 +68,9 @@ namespace DotNetBack.Repositories
             return words;
         }
 
-        public async Task DeleteWordAsync(int wordId)
+        public async Task<Response> DeleteWordAsync(int wordId)
         {
+            Response response = new Response(); 
             string sql = $"DELETE FROM Word WHERE word_id = {wordId}";
 
             var connection = GetConnection();
@@ -84,13 +85,17 @@ namespace DotNetBack.Repositories
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex);
+                response.StatusCode = 500;
+                response.StatusMessage = "Internal Server Error";
+                response.StatusDescription = ex.Message;
             }
+            return response;
 
         }
 
-        public async Task UpdateWordAsync(Word word)
+        public async Task<Response> UpdateWordAsync(Word word)
         {
+            Response response = new Response();
             string sql = "UPDATE Word SET " +
                          $"name = '{word.Name}', " +
                          $"translation = '{word.Translation}', " +
@@ -112,12 +117,16 @@ namespace DotNetBack.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                response.StatusCode = 500;
+                response.StatusMessage = "Internal Server Error";
+                response.StatusDescription = ex.Message;
             }
+            return response;
         }
 
-        public async Task<int> AddWordAsync(Word word)
+        public async Task<Response> AddWordAsync(Word word)
         {
+            Response response = new Response();
             string sql = "INSERT INTO Word (name, translation, category_id, img_link, repetition_num, repetition_date) " +
                          "OUTPUT INSERTED.ID " + // если нужно вернуть ID вставленной строки
                          "VALUES (@Name, @Translation, @CategoryId, @ImgLink, @RepetitionNum, @RepetitionDate)";
@@ -134,13 +143,14 @@ namespace DotNetBack.Repositories
                     $"VALUES ({word.Name}, {word.Translation}, {word.CategoryId}, {word.ImgLink}, {word.RepetitionNum}, {word.RepetitionDate});" +
                     "SELECT SCOPE_IDENTITY();";
 
-                return Convert.ToInt32(await command.ExecuteScalarAsync());
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return 0;
+                response.StatusCode = 500;
+                response.StatusMessage = "Internal Server Error";
+                response.StatusDescription = ex.Message;
             }
+            return response;
         }
     }
 }

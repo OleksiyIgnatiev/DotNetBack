@@ -36,23 +36,22 @@ namespace DotNetBack.Controllers
                 return BadRequest("Word is null.");
             }
 
-            var word_id = await wordRepository.AddWordAsync(word);
-            return Ok(new { Word_Id = word_id });
+            Response response = await wordRepository.AddWordAsync(word);
+            return Ok(response);
         }
 
         [HttpDelete("word/{word_id}")]
         public async Task<IActionResult> DeleteWord(int word_id)
         {
-            wordRepository.DeleteWordAsync(word_id);
-            return Ok();
+            Response response = await wordRepository.DeleteWordAsync(word_id);
+            return Ok(response);
         }
 
-        [HttpPut("word/{word_id}")]
-        public async Task<IActionResult> UpdateWord(int word_id, Word word)
+        [HttpPut]
+        public async Task<IActionResult> UpdateWord(UpdateWord word)
         {
-            word.WordId = word_id;
-            wordRepository.UpdateWordAsync(word);
-            return Ok();
+            Response response = await wordRepository.UpdateWordAsync(word.Create());
+            return Ok(response);
         }
     }
 }
