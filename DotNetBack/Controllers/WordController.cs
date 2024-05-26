@@ -17,7 +17,7 @@ namespace DotNetBack.Controllers
 
         private readonly IWordRepository wordRepository;
 
-        public WordController(IWordRepository wordRepository)
+        public WordCont roller(IWordRepository wordRepository)
         {
             this.wordRepository = wordRepository;
         }
