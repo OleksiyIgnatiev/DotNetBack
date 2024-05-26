@@ -37,6 +37,6 @@ CREATE TABLE Message (
     user_id INT,
     admin_id INT,
     is_shown BIT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (admin_id) REFERENCES Users(user_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (admin_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
