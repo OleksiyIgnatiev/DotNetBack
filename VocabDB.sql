@@ -19,7 +19,6 @@ CREATE TABLE Category (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
-
 CREATE TABLE Word (
     word_id INT PRIMARY KEY IDENTITY(1,1),
     name VARCHAR(100) NOT NULL,
@@ -38,5 +37,5 @@ CREATE TABLE Message (
     admin_id INT,
     is_shown BIT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (admin_id) REFERENCES Users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (admin_id) REFERENCES Users(user_id) ON DELETE NO ACTION
 );
