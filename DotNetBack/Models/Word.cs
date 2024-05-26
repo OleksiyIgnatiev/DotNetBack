@@ -25,7 +25,6 @@ namespace DotNetBack.Models
 
         public Word() { }
 
-        [JsonIgnore]
         public int WordId { get; set; }
 
 
@@ -59,35 +58,5 @@ namespace DotNetBack.Models
             return new Word(wordId, name, translation, categoryId, imgLink, repetitionNum, repetitionDate);
         }
     }
-
-    public class UpdateWord
-    {
-        public UpdateWord() { }
-
-        [Required]
-        public int WordId { get; set; }
-
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public string Translation { get; set; }
-
-        [Required]
-        public int? CategoryId { get; set; }
-
-        [Required]
-        public string ImgLink { get; set; }
-
-        [Required]
-        public int RepetitionNum { get; set; }
-
-        [Required]
-        public DateTime RepetitionDate { get; set; }
-
-        public Word Create()
-        {
-            return new Word(WordId, Name, Translation, CategoryId, ImgLink, RepetitionNum, RepetitionDate);
-        }
-    }
+    
 }

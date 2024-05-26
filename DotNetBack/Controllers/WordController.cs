@@ -22,7 +22,7 @@ namespace DotNetBack.Controllers
             this.wordRepository = wordRepository;
         }
 
-        [HttpGet("word/{category_id}")]
+        [HttpGet("{category_id}")]
         public async Task<IActionResult> GetUserCategories(int category_id)
         {
             List<Word> words = await wordRepository.GetWordsAsync(category_id);
@@ -41,7 +41,7 @@ namespace DotNetBack.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("word/{word_id}")]
+        [HttpDelete("{word_id}")]
         public async Task<IActionResult> DeleteWord(int word_id)
         {
             Response response = await wordRepository.DeleteWordAsync(word_id);
@@ -49,9 +49,9 @@ namespace DotNetBack.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateWord(UpdateWord word)
+        public async Task<IActionResult> UpdateWord(Word word)
         {
-            Response response = await wordRepository.UpdateWordAsync(word.Create());
+            Response response = await wordRepository.UpdateWordAsync(word);
             return Ok(response);
         }
     }
