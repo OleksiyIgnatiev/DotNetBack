@@ -125,13 +125,9 @@ namespace DotNetBack.Repositories
             return response;
         }
 
-        public async Task<Response> AddWordAsync(Word word)
+        public async Task<int> AddWordAsync(Word word)
         {
             Response response = new Response();
-            string sql = "INSERT INTO Word (name, translation, category_id, img_link, repetition_num, repetition_date) " +
-                         "OUTPUT INSERTED.ID " + // если нужно вернуть ID вставленной строки
-                         "VALUES (@Name, @Translation, @CategoryId, @ImgLink, @RepetitionNum, @RepetitionDate)";
-
             var connection = GetConnection();
 
             try
@@ -140,18 +136,16 @@ namespace DotNetBack.Repositories
 
                 var command = connection.CreateCommand();
 
-                command.CommandText = "\"INSERT INTO Word (name, translation, category_id, img_link, repetition_num, repetition_date)" +
-                    $"VALUES ({word.Name}, {word.Translation}, {word.CategoryId}, {word.ImgLink}, {word.RepetitionNum}, {word.RepetitionDate});" +
-                    "SELECT SCOPE_IDENTITY();";
+                string date = $"{word.RepetitionDate.Year}-{word.RepetitionDate.Month}-{word.RepetitionDate.Day}";
+                command.CommandText = "INSERT INTO Word (name, translation, category_id, img_link, repetition_num, repetition_date)" +
+                    $"VALUES ('{word.Name}', '{word.Translation}', {word.CategoryId}, '{word.ImgLink}', {word.RepetitionNum}, '{date}');  SELECT SCOPE_IDENTITY();";
 
+                return Convert.ToInt32(await command.ExecuteScalarAsync());
             }
             catch (Exception ex)
             {
-                response.StatusCode = 500;
-                response.StatusMessage = "Internal Server Error";
-                response.StatusDescription = ex.Message;
+                return 0;
             }
-            return response;
         }
     }
 }

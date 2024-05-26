@@ -11,13 +11,13 @@ namespace DotNetBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WordController : ControllerBase
+    public class wordsController : ControllerBase
     {
         //string connectionString = "Data Source= localhost;Initial Catalog=VocDB;User ID=sa;Password=12345678;Encrypt=False";
 
         private readonly IWordRepository wordRepository;
 
-        public WordCont roller(IWordRepository wordRepository)
+        public wordsController(IWordRepository wordRepository)
         {
             this.wordRepository = wordRepository;
         }
@@ -37,7 +37,7 @@ namespace DotNetBack.Controllers
                 return BadRequest("Word is null.");
             }
 
-            Response response = await wordRepository.AddWordAsync(word);
+            int response = await wordRepository.AddWordAsync(word);
             return Ok(response);
         }
 
