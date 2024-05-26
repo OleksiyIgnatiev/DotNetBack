@@ -86,8 +86,6 @@ namespace DotNetBack.Repositories
             catch(Exception ex)
             {
                 response.StatusCode = 500;
-                response.StatusMessage = "Internal Server Error";
-                response.StatusDescription = ex.Message;
             }
             return response;
 
@@ -119,8 +117,6 @@ namespace DotNetBack.Repositories
             catch (Exception ex)
             {
                 response.StatusCode = 500;
-                response.StatusMessage = "Internal Server Error";
-                response.StatusDescription = ex.Message;
             }
             return response;
         }
