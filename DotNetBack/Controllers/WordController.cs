@@ -27,12 +27,23 @@ namespace DotNetBack.Controllers
             return Ok(words);
         }
 
-
-        [HttpDelete]
-        [Route("DeleteWord")]
-        public JsonResult DeleteWord(int id)
+        [HttpPost]
+        public async Task<IActionResult> CreateWord([FromBody] Word word)
         {
-            return null;
+            if (word == null)
+            {
+                return BadRequest("Word is null.");
+            }
+
+            var word_id = await wordRepository.AddWordAsync(word);
+            return Ok(new { Word_Id = word_id });
+        }
+
+        [HttpDelete("word/{word_id}")]
+        public async Task<IActionResult> DeleteWord(int word_id)
+        {
+            wordRepository.DeleteWordAsync(word_id);
+            return Ok();
         }
     }
 }

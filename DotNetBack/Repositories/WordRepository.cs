@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using DotNetBack.Models;
 using Microsoft.Identity.Client;
 using Microsoft.EntityFrameworkCore.Migrations;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
 namespace DotNetBack.Repositories
@@ -111,24 +112,25 @@ namespace DotNetBack.Repositories
                          "OUTPUT INSERTED.ID " + // если нужно вернуть ID вставленной строки
                          "VALUES (@Name, @Translation, @CategoryId, @ImgLink, @RepetitionNum, @RepetitionDate)";
 
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("ppDBCon")))
+            var connection = GetConnection();
+
+            try
             {
                 await connection.OpenAsync();
 
-                var result = await connection.QuerySingleAsync<int>(sql, new
-                {
-                    Name = word.Name,
-                    Translation = word.Translation,
-                    CategoryId = word.CategoryId,
-                    ImgLink = word.ImgLink,
-                    RepetitionNum = word.RepetitionNum,
-                    RepetitionDate = word.RepetitionDate
-                });
+                var command = connection.CreateCommand();
 
-                return result;
+                command.CommandText = "\"INSERT INTO Word (name, translation, category_id, img_link, repetition_num, repetition_date)" +
+                    $"VALUES ({word.Name}, {word.Translation}, {word.CategoryId}, {word.ImgLink}, {word.RepetitionNum}, {word.RepetitionDate});" +
+                    "SELECT SCOPE_IDENTITY();";
+
+                return Convert.ToInt32(await command.ExecuteScalarAsync());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 0;
             }
         }
-
-
     }
 }
