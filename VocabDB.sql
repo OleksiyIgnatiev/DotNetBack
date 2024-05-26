@@ -4,12 +4,12 @@ CREATE TABLE Users (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL,
     level INT NOT NULL,
-    subscription VARCHAR(50) NOT NULL,
-    subscription_period DATE NOT NULL,
-    notification_type VARCHAR(50) NOT NULL,
+    subscription VARCHAR(50),
+    subscription_period DATE,
+    notification_type VARCHAR(50),
     reset_password_link VARCHAR(255),
     role VARCHAR(50) NOT NULL,
-    notification_time TIME NOT NULL
+    notification_time TIME
 );
 
 CREATE TABLE Category (
