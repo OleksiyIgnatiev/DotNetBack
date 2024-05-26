@@ -18,6 +18,7 @@ public class Startup
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IWordRepository, WordRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -44,4 +45,5 @@ public class Startup
             endpoints.MapControllers();
         });
     }
+
 }
