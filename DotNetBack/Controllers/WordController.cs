@@ -13,6 +13,7 @@ namespace DotNetBack.Controllers
     [ApiController]
     public class WordController : ControllerBase
     {
+        //string connectionString = "Data Source= localhost;Initial Catalog=VocDB;User ID=sa;Password=12345678;Encrypt=False";
 
         private readonly IWordRepository wordRepository;
 

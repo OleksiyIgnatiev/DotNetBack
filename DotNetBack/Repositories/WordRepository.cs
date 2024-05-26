@@ -96,13 +96,14 @@ namespace DotNetBack.Repositories
         public async Task<Response> UpdateWordAsync(Word word)
         {
             Response response = new Response();
+            string date = $"{word.RepetitionDate.Year}-{word.RepetitionDate.Month}-{word.RepetitionDate.Day}";
             string sql = "UPDATE Word SET " +
                          $"name = '{word.Name}', " +
                          $"translation = '{word.Translation}', " +
-                         $"category_id = { word.CategoryId}', " +
+                         $"category_id = { word.CategoryId}, " +
                          $"img_link = '{word.ImgLink}', " +
                          $"repetition_num = {word.RepetitionNum}, " +
-                         $"repetition_date = '{word.RepetitionDate}' " +
+                         $"repetition_date = '{date}' " +
                          $"WHERE word_id = {word.WordId}";
 
             var connection = GetConnection();
