@@ -17,6 +17,7 @@ public class Startup
 
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IWordRepository, WordRepository>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DotNetBack.Models;
+using DotNetBack.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.SqlClient;
@@ -11,59 +13,26 @@ namespace DotNetBack.Controllers
     public class WordController : ControllerBase
     {
 
-        private IConfiguration _configuration;
+        private readonly IWordRepository wordRepository;
 
-        public WordController(IConfiguration configuration)
+        public WordController(IWordRepository wordRepository)
         {
-            _configuration = configuration;
+            this.wordRepository = wordRepository;
         }
 
-        [HttpGet]
-        [Route("GetWord")]
-
-        public JsonResult GetWord()
+        [HttpGet("word/{category_id}")]
+        public async Task<IActionResult> GetUserCategories(int category_id)
         {
-            string query = "select * from dbo.Word";
-            DataTable table = new DataTable();
-            string sqlDatasource = _configuration.GetConnectionString("ppDBCon");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-            return new JsonResult(table);
+            List<Word> words = await wordRepository.GetWordsAsync(category_id);
+            return Ok(words);
         }
-        
+
 
         [HttpDelete]
         [Route("DeleteWord")]
-
         public JsonResult DeleteWord(int id)
         {
-            string query = "delete from dbo.Word where id_word=@id";
-            DataTable table = new DataTable();
-            string sqlDatasource = _configuration.GetConnectionString("ppDBCon");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDatasource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@id", id);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-            return new JsonResult("Deleted Successfully");
+            return null;
         }
     }
 }

@@ -3,17 +3,61 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using DotNetBack.Models;
+using Microsoft.Identity.Client;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 
 namespace DotNetBack.Repositories
 {
-    public class WordRepository
+    public class WordRepository : IWordRepository
     {
         private readonly IConfiguration _configuration;
 
         public WordRepository(IConfiguration configuration)
         {
             _configuration = configuration;
+        }
+
+        private SqlConnection GetConnection()
+        {
+            return new SqlConnection(_configuration.GetConnectionString("ppDBCon"));
+        }
+
+        public async Task<List<Word>> GetWordsAsync(int category_id)
+        {
+            List<Word> words = new List<Word>();
+
+            SqlConnection connection = GetConnection();
+
+            await connection.OpenAsync();
+
+            var command = connection.CreateCommand();
+
+
+            command.CommandText = "SELECT * FROM Word WHERE category_id = @category_id";
+            command.Parameters.AddWithValue("@category_id", category_id);
+
+            var reader = await command.ExecuteReaderAsync();
+
+
+            while (await reader.ReadAsync())
+            {
+                int word_id = Convert.ToInt32(reader["word_id"]);
+                string name = reader["name"].ToString();
+                string translation = reader["translation"].ToString();
+                string img_link = reader["translation"].ToString();
+                int repetition_num = Convert.ToInt32(reader["repetition_num"]);
+                DateTime repetition_date = Convert.ToDateTime(reader["repetition_date"]);
+
+                Word word = Word.Create(word_id, name, translation, category_id, img_link, repetition_num, repetition_date);
+
+                words.Add(word);
+            }
+
+
+
+
+            return words;
         }
 
         public async Task<int> DeleteWordAsync(int wordId)

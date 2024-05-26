@@ -6,6 +6,8 @@ namespace DotNetBack.Repositories
     {
         Task<int> DeleteWordAsync(int wordId);
 
+        Task<List<Word>> GetWordsAsync(int category_id);
+       
         Task<int> AddWordAsync(Word category);
 
         Task<int> UpdateWordAsync(Word word);
