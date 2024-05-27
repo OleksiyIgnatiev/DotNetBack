@@ -26,8 +26,14 @@ CREATE TABLE Word (
     category_id INT,
     img_link VARCHAR(255),
     repetition_num INT NOT NULL,
-    repetition_date DATE NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Category(category_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Repetition (
+    reptition_id INT PRIMARY KEY IDENTITY(1,1),
+    repetition_date DATE NOT NULL,
+    word_id INT,
+    FOREIGN KEY (word_id) REFERENCES Word(word_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Message (
