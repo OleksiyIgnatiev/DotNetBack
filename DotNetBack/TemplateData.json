@@ -2,82 +2,705 @@
   "categories": [
     {
       "CategoryId": 1,
-      "CategoryName": "Category 1",
+      "CategoryName": "анатомія",
       "UserId": 1,
-      "CategoryLength": 5,
-      "ProgressionPercentage": 0.75
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
     },
     {
       "CategoryId": 2,
-      "CategoryName": "Category 2",
+      "CategoryName": "археологія",
       "UserId": 1,
-      "CategoryLength": 3,
-      "ProgressionPercentage": 0.5
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 3,
+      "CategoryName": "архітектура",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 4,
+      "CategoryName": "базові дієслова",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 5,
+      "CategoryName": "Business",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 6,
+      "CategoryName": "зовнішність",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 7,
+      "CategoryName": "Військова справа",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 8,
+      "CategoryName": "Пори року",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 9,
+      "CategoryName": "час",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 10,
+      "CategoryName": "географія",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 11,
+      "CategoryName": "місто",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 12,
+      "CategoryName": "гроші",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 13,
+      "CategoryName": "дні тижня",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 14,
+      "CategoryName": "будинок",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 15,
+      "CategoryName": "їжа",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 16,
+      "CategoryName": "тварина",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 17,
+      "CategoryName": "здоров'я",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 18,
+      "CategoryName": "знаки Зодіаку",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 19,
+      "CategoryName": "ідіоми",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 20,
+      "CategoryName": "мистецтво",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 21,
+      "CategoryName": "кар'єра",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 22,
+      "CategoryName": "кіно",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 23,
+      "CategoryName": "комп'ютер",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 24,
+      "CategoryName": "Космос",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 25,
+      "CategoryName": "література",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 26,
+      "CategoryName": "маркетинг",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 27,
+      "CategoryName": "математика",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 28,
+      "CategoryName": "меблі",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 29,
+      "CategoryName": "місяця",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 30,
+      "CategoryName": "музика",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 31,
+      "CategoryName": "неправильні дієслова",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 32,
+      "CategoryName": "одяг",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 33,
+      "CategoryName": "політика",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 34,
+      "CategoryName": "психологія",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 35,
+      "CategoryName": "подорожі",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 36,
+      "CategoryName": "сім'я",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 37,
+      "CategoryName": "ЗМІ",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 38,
+      "CategoryName": "спорт",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 39,
+      "CategoryName": "хобі",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 40,
+      "CategoryName": "кольори",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 41,
+      "CategoryName": "екологія",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 42,
+      "CategoryName": "економіка",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
+    },
+    {
+      "CategoryId": 43,
+      "CategoryName": "юриспруденція",
+      "UserId": 1,
+      "CategoryLength": 0,
+      "ProgressionPercentage": 0
     }
   ],
   "words": [
     {
       "WordId": 1,
-      "Name": "Word 1",
-      "Translation": "Translation 1",
+      "Name": "Head",
+      "Translation": "Голова",
       "CategoryId": 1,
       "ImgLink": "link_to_image_1.jpg",
       "RepetitionNum": 0
     },
     {
       "WordId": 2,
-      "Name": "Word 2",
-      "Translation": "Translation 2",
+      "Name": "Brain",
+      "Translation": "Мозок",
       "CategoryId": 1,
       "ImgLink": "link_to_image_2.jpg",
       "RepetitionNum": 0
     },
     {
       "WordId": 3,
-      "Name": "Word 3",
-      "Translation": "Translation 3",
+      "Name": "Eye",
+      "Translation": "Око",
       "CategoryId": 1,
       "ImgLink": "link_to_image_3.jpg",
       "RepetitionNum": 0
     },
     {
       "WordId": 4,
-      "Name": "Word 4",
-      "Translation": "Translation 4",
+      "Name": "Ear",
+      "Translation": "Вухо",
       "CategoryId": 1,
       "ImgLink": "link_to_image_4.jpg",
       "RepetitionNum": 0
     },
     {
       "WordId": 5,
-      "Name": "Word 5",
-      "Translation": "Translation 5",
+      "Name": "Nose",
+      "Translation": "Ніс",
       "CategoryId": 1,
       "ImgLink": "link_to_image_5.jpg",
       "RepetitionNum": 0
     },
     {
       "WordId": 6,
-      "Name": "Word 6",
-      "Translation": "Translation 6",
-      "CategoryId": 2,
+      "Name": "Mouth",
+      "Translation": "Рот",
+      "CategoryId": 1,
       "ImgLink": "link_to_image_6.jpg",
       "RepetitionNum": 0
     },
     {
       "WordId": 7,
-      "Name": "Word 7",
-      "Translation": "Translation 7",
-      "CategoryId": 2,
+      "Name": "Tooth",
+      "Translation": "Зуб",
+      "CategoryId": 1,
       "ImgLink": "link_to_image_7.jpg",
       "RepetitionNum": 0
     },
     {
       "WordId": 8,
-      "Name": "Word 8",
-      "Translation": "Translation 8",
-      "CategoryId": 2,
+      "Name": "Tongue",
+      "Translation": "Язик",
+      "CategoryId": 1,
       "ImgLink": "link_to_image_8.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 9,
+      "Name": "Neck",
+      "Translation": "Шия",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_9.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 10,
+      "Name": "Shoulder",
+      "Translation": "Плече",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_10.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 11,
+      "Name": "Arm",
+      "Translation": "Рука",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_11.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 12,
+      "Name": "Elbow",
+      "Translation": "Лікоть",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_12.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 13,
+      "Name": "Wrist",
+      "Translation": "Зап'ястя",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_13.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 14,
+      "Name": "Hand",
+      "Translation": "Кисть",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_14.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 15,
+      "Name": "Finger",
+      "Translation": "Палець",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_15.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 16,
+      "Name": "Chest",
+      "Translation": "Груди",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_16.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 17,
+      "Name": "Heart",
+      "Translation": "Серце",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_17.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 18,
+      "Name": "Lung",
+      "Translation": "Легеня",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_18.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 19,
+      "Name": "Stomach",
+      "Translation": "Шлунок",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_19.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 20,
+      "Name": "Liver",
+      "Translation": "Печінка",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_20.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 21,
+      "Name": "Kidney",
+      "Translation": "Нирка",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_21.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 22,
+      "Name": "Intestine",
+      "Translation": "Кишечник",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_22.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 23,
+      "Name": "Back",
+      "Translation": "Спина",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_23.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 24,
+      "Name": "Spine",
+      "Translation": "Хребет",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_24.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 25,
+      "Name": "Hip",
+      "Translation": "Стегно",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_25.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 26,
+      "Name": "Leg",
+      "Translation": "Нога",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_26.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 27,
+      "Name": "Knee",
+      "Translation": "Коліно",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_27.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 28,
+      "Name": "Ankle",
+      "Translation": "Щиколотка",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_28.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 29,
+      "Name": "Foot",
+      "Translation": "Стопа",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_29.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 30,
+      "Name": "Toe",
+      "Translation": "Палець ноги",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_30.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 31,
+      "Name": "Bone",
+      "Translation": "Кістка",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_31.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 32,
+      "Name": "Skin",
+      "Translation": "Шкіра",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_32.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 33,
+      "Name": "Muscle",
+      "Translation": "М'яз",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_33.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 34,
+      "Name": "Blood",
+      "Translation": "Кров",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_34.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 35,
+      "Name": "Vein",
+      "Translation": "Вена",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_35.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 36,
+      "Name": "Artery",
+      "Translation": "Артерія",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_36.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 37,
+      "Name": "Nerve",
+      "Translation": "Нерв",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_37.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 38,
+      "Name": "Larynx",
+      "Translation": "Гортань",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_38.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 39,
+      "Name": "Pharynx",
+      "Translation": "Глотка",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_39.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 40,
+      "Name": "Esophagus",
+      "Translation": "Стравохід",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_40.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 41,
+      "Name": "Trachea",
+      "Translation": "Трахея",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_41.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 42,
+      "Name": "Bladder",
+      "Translation": "Сечовий міхур",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_42.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 43,
+      "Name": "Urethra",
+      "Translation": "Сечовипускальний канал",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_43.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 44,
+      "Name": "Pancreas",
+      "Translation": "Підшлункова залоза",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_44.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 45,
+      "Name": "Spleen",
+      "Translation": "Селезінка",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_45.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 46,
+      "Name": "Gallbladder",
+      "Translation": "Жовчний міхур",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_46.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 47,
+      "Name": "Thyroid",
+      "Translation": "Щитовидна залоза",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_47.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 48,
+      "Name": "Pituitary gland",
+      "Translation": "Гіпофіз",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_48.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 49,
+      "Name": "Adrenal gland",
+      "Translation": "Надниркова залоза",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_49.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 50,
+      "Name": "Appendix",
+      "Translation": "Апендикс",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_50.jpg",
       "RepetitionNum": 0
     }
   ]

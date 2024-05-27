@@ -126,78 +126,142 @@ namespace DotNetBack.Repositories
             }
         }
 
-        public async Task UpdateCategoryAsync(Category category)
+        public async Task<Response> UpdateCategoryAsync(Category category)
         {
+            Response response = new Response();
             using (var connection = GetConnection())
             {
-                await connection.OpenAsync();
-
-                using (var command = connection.CreateCommand())
+                try
                 {
-                    command.CommandText = "UPDATE Category SET category_name = @CategoryName WHERE category_id = @CategoryId";
-                    command.Parameters.AddWithValue("@CategoryName", category.CategoryName);
-                    command.Parameters.AddWithValue("@CategoryId", category.CategoryId);
+                    await connection.OpenAsync();
 
-                    await command.ExecuteNonQueryAsync();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "UPDATE Category SET category_name = @CategoryName WHERE category_id = @CategoryId";
+                        command.Parameters.AddWithValue("@CategoryName", category.CategoryName);
+                        command.Parameters.AddWithValue("@CategoryId", category.CategoryId);
+
+                        int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                        if (rowsAffected == 0)
+                        {
+                            response.StatusCode = 500;
+                            response.Message = "Category not found";
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    response.StatusCode = 500;
+                    response.Message = ex.Message;
                 }
             }
+            return response;
         }
 
-        public async Task DeleteCategoryAsync(int category_id)
+        public async Task<Response> DeleteCategoryAsync(int category_id)
         {
+            Response response = new Response();
             using (var connection = GetConnection())
             {
-                await connection.OpenAsync();
-
-                using (var command = connection.CreateCommand())
+                try
                 {
-                    command.CommandText = "DELETE FROM Category WHERE category_id = @CategoryId";
-                    command.Parameters.AddWithValue("@CategoryId", category_id);
+                    await connection.OpenAsync();
 
-                    await command.ExecuteNonQueryAsync();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "DELETE FROM Category WHERE category_id = @CategoryId";
+                        command.Parameters.AddWithValue("@CategoryId", category_id);
+
+                        int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                        if (rowsAffected == 0)
+                        {
+                            response.StatusCode = 500;
+                            response.Message = "Category not found";
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    response.StatusCode = 500;
+                    response.Message = ex.Message;
                 }
             }
+            return response;
         }
 
-        public async Task ResetProgressAsync(int category_id)
+        public async Task<Response> ResetProgressAsync(int category_id)
         {
+            Response response = new Response();
             using (var connection = GetConnection())
             {
-                await connection.OpenAsync();
-
-                using (var command = connection.CreateCommand())
+                try
                 {
-                    command.CommandText = @"
-                    UPDATE Word 
-                    SET 
-                        repetition_num = 0,
-                        repetition_date = GETDATE()
-                    WHERE 
-                        category_id = @CategoryId";
-                    command.Parameters.AddWithValue("@CategoryId", category_id);
+                    await connection.OpenAsync();
 
-                    await command.ExecuteNonQueryAsync();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = @"
+                        UPDATE Word 
+                        SET 
+                            repetition_num = 0,
+                            repetition_date = GETDATE()
+                        WHERE 
+                            category_id = @CategoryId";
+                        command.Parameters.AddWithValue("@CategoryId", category_id);
+
+                        int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                        if (rowsAffected == 0)
+                        {
+                            response.StatusCode = 500;
+                            response.Message = "No words found for this category";
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    response.StatusCode = 500;
+                    response.Message = ex.Message;
                 }
             }
+            return response;
         }
 
-        public async Task ClearContentAsync(int category_id)
+        public async Task<Response> ClearContentAsync(int category_id)
         {
+            Response response = new Response();
             using (var connection = GetConnection())
             {
-                await connection.OpenAsync();
-
-                using (var command = connection.CreateCommand())
+                try
                 {
-                    command.CommandText = @"
-                    DELETE FROM Word 
-                    WHERE 
-                        category_id = @CategoryId";
-                    command.Parameters.AddWithValue("@CategoryId", category_id);
+                    await connection.OpenAsync();
 
-                    await command.ExecuteNonQueryAsync();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = @"
+                        DELETE FROM Word 
+                        WHERE 
+                            category_id = @CategoryId";
+                        command.Parameters.AddWithValue("@CategoryId", category_id);
+
+                        int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                        if (rowsAffected == 0)
+                        {
+                            response.StatusCode = 500;
+                            response.Message = "No words found for this category";
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    response.StatusCode = 500;
+                    response.Message = ex.Message;
                 }
             }
+            return response;
         }
     }
 }
