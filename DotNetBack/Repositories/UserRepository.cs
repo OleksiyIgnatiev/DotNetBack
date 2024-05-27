@@ -138,7 +138,7 @@ namespace DotNetBack.Repositories
                         int userId = Convert.ToInt32(await command.ExecuteScalarAsync());
 
                         // Read JSON file content
-                        string jsonFilePath = "D:/development/DotNetBack/DotNetBack/TemplateData.json";
+                        string jsonFilePath = "C:/Users/Empty/Source/Repos/DotNetBack/DotNetBack/TemplateData.json";
                         string jsonContent = await File.ReadAllTextAsync(jsonFilePath);
 
                         // Deserialize JSON to object
