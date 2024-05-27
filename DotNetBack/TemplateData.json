@@ -1,0 +1,84 @@
+{
+  "categories": [
+    {
+      "CategoryId": 1,
+      "CategoryName": "Category 1",
+      "UserId": 1,
+      "CategoryLength": 5,
+      "ProgressionPercentage": 0.75
+    },
+    {
+      "CategoryId": 2,
+      "CategoryName": "Category 2",
+      "UserId": 1,
+      "CategoryLength": 3,
+      "ProgressionPercentage": 0.5
+    }
+  ],
+  "words": [
+    {
+      "WordId": 1,
+      "Name": "Word 1",
+      "Translation": "Translation 1",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_1.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 2,
+      "Name": "Word 2",
+      "Translation": "Translation 2",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_2.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 3,
+      "Name": "Word 3",
+      "Translation": "Translation 3",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_3.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 4,
+      "Name": "Word 4",
+      "Translation": "Translation 4",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_4.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 5,
+      "Name": "Word 5",
+      "Translation": "Translation 5",
+      "CategoryId": 1,
+      "ImgLink": "link_to_image_5.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 6,
+      "Name": "Word 6",
+      "Translation": "Translation 6",
+      "CategoryId": 2,
+      "ImgLink": "link_to_image_6.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 7,
+      "Name": "Word 7",
+      "Translation": "Translation 7",
+      "CategoryId": 2,
+      "ImgLink": "link_to_image_7.jpg",
+      "RepetitionNum": 0
+    },
+    {
+      "WordId": 8,
+      "Name": "Word 8",
+      "Translation": "Translation 8",
+      "CategoryId": 2,
+      "ImgLink": "link_to_image_8.jpg",
+      "RepetitionNum": 0
+    }
+  ]
+}

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using DotNetBack.Models;
 using DotNetBack.Repositories;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace DotNetBack.Repositories
 {
@@ -44,24 +46,91 @@ namespace DotNetBack.Repositories
                 string notificationType = "email";
                 string role = "user";
 
-                using (SqlCommand command = new SqlCommand(
-                    "INSERT INTO Users (username, email, password, notification_time, level, subscription, subscription_period, notification_type, role) VALUES (@username, @Email, @Password, @NotificationTime, @Level, @Subscription, @SubscriptionPeriod, @NotificationType, @Role)",
-                    connection))
-                {
-                    command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@Email", email);
-                    command.Parameters.AddWithValue("@Password", password);
-                    command.Parameters.AddWithValue("@NotificationTime", notificationTime);
-                    command.Parameters.AddWithValue("@Level", 0); // Adding level parameter with value 0
-                    command.Parameters.AddWithValue("@Subscription", 0); // Adding subscription parameter with value 0
-                    command.Parameters.AddWithValue("@SubscriptionPeriod", subscriptionPeriod); // Adding subscription_period with current date
-                    command.Parameters.AddWithValue("@NotificationType", notificationType); // Adding notification_type with value "email"
-                    command.Parameters.AddWithValue("@Role", role); // Adding role with value "user"
+                // Begin transaction
+                SqlTransaction transaction = connection.BeginTransaction();
 
-                    await command.ExecuteNonQueryAsync();
+                try
+                {
+                    // Insert user into Users table
+                    using (SqlCommand command = new SqlCommand(
+                        "INSERT INTO Users (username, email, password, notification_time, level, subscription, subscription_period, notification_type, role) " +
+                        "VALUES (@username, @Email, @Password, @NotificationTime, @Level, @Subscription, @SubscriptionPeriod, @NotificationType, @Role); " +
+                        "SELECT SCOPE_IDENTITY();",
+                        connection, transaction))
+                    {
+                        command.Parameters.AddWithValue("@username", username);
+                        command.Parameters.AddWithValue("@Email", email);
+                        command.Parameters.AddWithValue("@Password", password);
+                        command.Parameters.AddWithValue("@NotificationTime", notificationTime);
+                        command.Parameters.AddWithValue("@Level", 0);
+                        command.Parameters.AddWithValue("@Subscription", 0);
+                        command.Parameters.AddWithValue("@SubscriptionPeriod", subscriptionPeriod);
+                        command.Parameters.AddWithValue("@NotificationType", notificationType);
+                        command.Parameters.AddWithValue("@Role", role);
+
+                        // Execute scalar to get the newly inserted user_id
+                        int userId = Convert.ToInt32(await command.ExecuteScalarAsync());
+
+                        // Read JSON file content
+                        string jsonFilePath = "C:/Users/Empty/source/repos/DotNetBack/DotNetBack/TemplateData.json";
+                        string jsonContent = await File.ReadAllTextAsync(jsonFilePath);
+
+                        // Deserialize JSON to object
+                        var data = JsonConvert.DeserializeObject<Data>(jsonContent);
+
+                        // Insert categories associated with the user
+                        foreach (var category in data.Categories)
+                        {
+                            using (SqlCommand addCategoryCommand = new SqlCommand(
+                                "INSERT INTO Category (category_name, user_id) " +
+                                "VALUES (@categoryName, @userId)",
+                                connection, transaction))
+                            {
+                                addCategoryCommand.Parameters.AddWithValue("@categoryName", category.CategoryName);
+                                addCategoryCommand.Parameters.AddWithValue("@userId", userId);
+                                await addCategoryCommand.ExecuteNonQueryAsync();
+                            }
+                        }
+
+                        // Insert words associated with the user's categories
+                        foreach (var word in data.Words)
+                        {
+                            int categoryId = word.CategoryId ?? 0; // Consider null categoryId
+                            using (SqlCommand addWordCommand = new SqlCommand(
+                                "INSERT INTO Word (name, translation, category_id, img_link, repetition_num) " +
+                                "VALUES (@name, @translation, @categoryId, @imgLink, @repetitionNum)",
+                                connection, transaction))
+                            {
+                                addWordCommand.Parameters.AddWithValue("@name", word.Name);
+                                addWordCommand.Parameters.AddWithValue("@translation", word.Translation);
+                                addWordCommand.Parameters.AddWithValue("@categoryId", categoryId);
+                                addWordCommand.Parameters.AddWithValue("@imgLink", word.ImgLink);
+                                addWordCommand.Parameters.AddWithValue("@repetitionNum", word.RepetitionNum);
+                                await addWordCommand.ExecuteNonQueryAsync();
+                            }
+                        }
+
+                        // Commit the transaction
+                        transaction.Commit();
+                    }
+                }
+                catch (Exception)
+                {
+                    // Rollback the transaction if an error occurs
+                    transaction.Rollback();
+                    throw; // Re-throw the exception to the caller
                 }
             }
         }
+
+
+        public class Data
+        {
+            public List<Category> Categories { get; set; }
+            public List<Word> Words { get; set; }
+        }
+
+
 
 
         public async Task UpdateNotificationAsync(int userId, string notificationType, DateTime notificationTime)
