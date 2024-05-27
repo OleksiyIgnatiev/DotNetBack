@@ -16,8 +16,8 @@ namespace DotNetBack.Repositories
         //Task<object> AdminActionAsync(int userId);
         Task DeleteUserAsync(int userId);
         //Task<IEnumerable<object>> ShareSuccessesAsync(int userId);
-        //Task<IEnumerable<object>> GetCalendarAsync(int userId);
-        //Task<object> GetRecordAsync(int userId);
+        Task<IEnumerable<object>> GetCalendarAsync(int userId);
+        Task<object> GetRecordAsync(int userId);
         Task<object> GetUserInfoAsync(int userId);
     }
 }

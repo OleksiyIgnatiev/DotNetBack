@@ -142,7 +142,6 @@ namespace DotNetBack.Repositories
 
         //public async Task<object> AdminActionAsync(int userId) //TODO реализовать
         //{
-        //    return 1;
         //}
 
         public async Task DeleteUserAsync(int userId)
@@ -160,71 +159,170 @@ namespace DotNetBack.Repositories
 
         //public async Task<IEnumerable<object>> ShareSuccessesAsync(int userId)
         //{
-        //    List<object> successes = new List<object>();
         //    using (SqlConnection connection = new SqlConnection(_connectionString))
-        //    {
-        //        await connection.OpenAsync();
-        //        using (SqlCommand command = new SqlCommand("SELECT U.user_id, W.repetition_date " +
-        //            "FROM Users U " +
-        //            "JOIN Category C ON U.user_id = C.user_id " +
-        //            "JOIN Word W ON C.category_id = W.category_id " +
-        //            "WHERE U.user_id = @userId", connection))
-        //        {
-        //            command.Parameters.AddWithValue("@userId", userId);
-        //            using (SqlDataReader reader = await command.ExecuteReaderAsync())
-        //            {
-        //                while (await reader.ReadAsync())
-        //                {
-        //                    successes.Add(new
-        //                    {
-        //                        UserId = reader.GetInt32(0),
-        //                        RepetitionDate = reader.GetDateTime(1)
-        //                    });
-        //                }
-        //            }
-        //        }
+        //    {  
         //    }
-        //    return successes;
         //}
 
-        //public async Task<IEnumerable<object>> GetCalendarAsync(int userId)
-        //{
-        //    List<object> calendar = new List<object>();
-        //    using (SqlConnection connection = new SqlConnection(_connectionString))
-        //    {
-        //        await connection.OpenAsync();
-        //        using (SqlCommand command = new SqlCommand("SELECT W.repetition_date, W.repetition_num " +
-        //            "FROM Users U " +
-        //            "JOIN Category C ON U.user_id = C.user_id " +
-        //            "JOIN Word W ON C.category_id = W.category_id " +
-        //            "WHERE U.user_id = @userId " +
-        //            "AND W.repetition_date BETWEEN DATEADD(day, -7, GETDATE()) AND GETDATE()", connection))
-        //        {
-        //            command.Parameters.AddWithValue("@userId", userId);
-        //            using (SqlDataReader reader = await command.ExecuteReaderAsync())
-        //            {
-        //                while (await reader.ReadAsync())
-        //                {
-        //                    calendar.Add(new
-        //                    {
-        //                        RepetitionDate = reader.GetDateTime(0),
-        //                        RepetitionNum = reader.GetInt32(1)
-        //                    });
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return calendar;
-        //}
+        public async Task<IEnumerable<object>> GetCalendarAsync(int userId)
+        {
+            List<object> calendar = new List<object>();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand(@"
+                WITH RepeatedWords AS (
+                    SELECT
+                        r.repetition_date,
+                        COUNT(DISTINCT r.word_id) AS repeated_count
+                    FROM
+                        Repetition r
+                    JOIN Word w ON r.word_id = w.word_id
+                    JOIN Category c ON w.category_id = c.category_id
+                    WHERE
+                        c.user_id = @userId AND
+                        r.repetition_date >= DATEADD(DAY, -7, GETDATE())
+                    GROUP BY
+                        r.repetition_date
+                ),
+                LearnedWords AS (
+                    SELECT
+                        r.repetition_date,
+                        COUNT(DISTINCT r.word_id) AS learned_count
+                    FROM
+                        Repetition r
+                    JOIN Word w ON r.word_id = w.word_id
+                    JOIN Category c ON w.category_id = c.category_id
+                    JOIN (
+                        SELECT
+                            word_id,
+                            MIN(repetition_date) AS first_repetition_date
+                        FROM
+                            Repetition
+                        GROUP BY
+                            word_id
+                    ) AS FirstRepetitions ON r.word_id = FirstRepetitions.word_id AND r.repetition_date = FirstRepetitions.first_repetition_date
+                    WHERE
+                        c.user_id = @userId AND
+                        r.repetition_date >= DATEADD(DAY, -7, GETDATE())
+                    GROUP BY
+                        r.repetition_date
+                )
+                SELECT
+                    COALESCE(rw.repetition_date, lw.repetition_date) AS repetition_date,
+                    COALESCE(rw.repeated_count, 0) AS repeated_count,
+                    COALESCE(lw.learned_count, 0) AS learned_count
+                FROM
+                    RepeatedWords rw
+                FULL OUTER JOIN
+                    LearnedWords lw ON rw.repetition_date = lw.repetition_date
+                ORDER BY
+                repetition_date;", connection))
+                {
+                    command.Parameters.AddWithValue("@userId", userId);
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            calendar.Add(new
+                            {
+                                repetition_date = reader.GetDateTime(0),
+                                repetition_num = reader.GetInt32(1),
+                                learned_num = reader.GetInt32(2)
+                            });
+                        }
+                    }
+                }
+            }
+            return calendar;
+        }
 
-        //public async Task<object> GetRecordAsync(int userId) //TODO реализовать
-        //{
-        //    using (SqlConnection connection = new SqlConnection(_connectionString))
-        //    {
-               
-        //    }
-        //    return null;
-        //}
+
+
+        public async Task<object> GetRecordAsync(int userId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (SqlCommand command = new SqlCommand(@"
+                    WITH UserRepetitions AS (
+                        SELECT 
+                            c.user_id,
+                            r.word_id,
+                            r.repetition_date,
+                            LAG(r.repetition_date, 1) OVER (PARTITION BY c.user_id ORDER BY r.repetition_date) AS prev_date
+                        FROM 
+                            Word w
+                        JOIN 
+                            Repetition r ON w.word_id = r.word_id
+                        JOIN 
+                            Category c ON w.category_id = c.category_id
+                        WHERE 
+                            c.user_id = @UserId
+                    ),
+                    ConsecutiveDays AS (
+                        SELECT
+                            user_id,
+                            repetition_date,
+                            CASE 
+                                WHEN DATEDIFF(day, prev_date, repetition_date) = 1 THEN 0
+                                ELSE 1
+                            END AS is_start_of_streak
+                        FROM 
+                            UserRepetitions
+                    ),
+                    Streaks AS (
+                        SELECT
+                            user_id,
+                            repetition_date,
+                            SUM(is_start_of_streak) OVER (PARTITION BY user_id ORDER BY repetition_date ROWS UNBOUNDED PRECEDING) AS streak_id
+                        FROM 
+                            ConsecutiveDays
+                    ),
+                    StreakLengths AS (
+                        SELECT
+                            user_id,
+                            streak_id,
+                            COUNT(*) AS streak_length,
+                            MAX(repetition_date) AS streak_end_date
+                        FROM 
+                            Streaks
+                        GROUP BY 
+                            user_id, streak_id
+                    )
+                    SELECT 
+                        MAX(streak_length) AS max_streak_length_ever,
+                        MAX(CASE 
+                            WHEN streak_end_date = CAST(GETDATE() AS DATE) THEN streak_length
+                            ELSE 0
+                        END) AS current_streak_length
+                    FROM 
+                        StreakLengths
+                    WHERE 
+                        user_id = @UserId;
+                ", connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            return new
+                            {
+                                consecutive_days = reader.GetInt32(1),
+                                consecutive_days_record = reader.GetInt32(0)
+                            };
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+        }
+
 
         public async Task<object> GetUserInfoAsync(int userId)
         {

@@ -75,13 +75,6 @@ namespace DotNetBack.Controllers
             return Ok(users);
         }
 
-        //[HttpPut("to-admin")]
-        //public async Task<IActionResult> AdminAction(int userId)
-        //{
-        //    var result = await _userRepository.AdminActionAsync(userId);
-        //    return Ok(result);
-        //}
-
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int userId)
         {
@@ -96,19 +89,19 @@ namespace DotNetBack.Controllers
         //    return Ok(successes);
         //}
 
-        //[HttpGet("calendar/{userId}")]
-        //public async Task<IActionResult> GetCalendar(int userId)
-        //{
-        //    var calendar = await _userRepository.GetCalendarAsync(userId);
-        //    return Ok(calendar);
-        //}
+        [HttpGet("calendar/{userId}")]
+        public async Task<IActionResult> GetCalendar(int userId)
+        {
+            var calendar = await _userRepository.GetCalendarAsync(userId);
+            return Ok(calendar);
+        }
 
-        //[HttpGet("record/{userId}")]
-        //public async Task<IActionResult> GetRecord(int userId)
-        //{
-        //    var record = await _userRepository.GetRecordAsync(userId);
-        //    return Ok(record);
-        //}
+        [HttpGet("record/{userId}")]
+        public async Task<IActionResult> GetRecord(int userId)
+        {
+            var record = await _userRepository.GetRecordAsync(userId);
+            return Ok(record);
+        }
 
         [HttpGet("info/{userId}")]
         public async Task<IActionResult> GetUserInfo(int userId)
