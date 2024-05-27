@@ -497,5 +497,38 @@ namespace DotNetBack.Repositories
             }
             return null;
         }
+        private async Task<object> GetUserByEmailAsync(string email)
+        {
+            User user = null;
+            string connectionString = "ppDBCon";
+            string query = "SELECT username, email, level, subscription, subscription_period, notification_type, notification_time FROM Users WHERE email = @Email";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Email", email);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            return new
+                            {
+                                Username = reader.GetString(0),
+                                Email = reader.GetString(1),
+                                Level = reader.GetInt32(2),
+                                Subscription = reader.GetString(3),
+                                SubscriptionPeriod = reader.GetDateTime(4),
+                                NotificationType = reader.GetString(5),
+                                NotificationTime = reader.GetTimeSpan(6)
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
     }
 }

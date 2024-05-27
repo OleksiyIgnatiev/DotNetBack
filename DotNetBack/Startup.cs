@@ -19,6 +19,8 @@ public class Startup
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IWordRepository, WordRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddSession();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -33,6 +35,7 @@ public class Startup
             app.UseHsts();
         }
 
+        app.UseSession();
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
