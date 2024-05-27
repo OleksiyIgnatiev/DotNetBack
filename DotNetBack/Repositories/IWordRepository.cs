@@ -6,11 +6,11 @@ namespace DotNetBack.Repositories
     {
         Task<Response> DeleteWordAsync(int wordId);
 
-        Task<List<Word>> GetWordsAsync(int category_id);
+        Task<Response> GetWordsAsync(int category_id);
        
-       /* Task<int> AddWordAsync(Word category);*/
+        Task<Response> AddWordAsync(Word category);
 
-        /*Task<Response> UpdateWordAsync(Word word);*/
+        Task<Response> UpdateWordAsync(Word word);
     }
 }
  

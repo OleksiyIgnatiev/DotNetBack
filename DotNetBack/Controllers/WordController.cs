@@ -1,4 +1,4 @@
-﻿using DotNetBack.Models;
+﻿    using DotNetBack.Models;
 using DotNetBack.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,11 +25,11 @@ namespace DotNetBack.Controllers
         [HttpGet("{category_id}")]
         public async Task<IActionResult> GetUserCategories(int category_id)
         {
-            List<Word> words = await wordRepository.GetWordsAsync(category_id);
+            Response words = await wordRepository.GetWordsAsync(category_id);
             return Ok(words);
         }
 
-        /*[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> CreateWord([FromBody] Word word)
         {
             if (word == null)
@@ -37,9 +37,9 @@ namespace DotNetBack.Controllers
                 return BadRequest("Word is null.");
             }
 
-            int response = await wordRepository.AddWordAsync(word);
+            Response response = await wordRepository.AddWordAsync(word);
             return Ok(response);
-        }*/
+        }
 
         [HttpDelete("{word_id}")]
         public async Task<IActionResult> DeleteWord(int word_id)
@@ -47,13 +47,13 @@ namespace DotNetBack.Controllers
             Response response = await wordRepository.DeleteWordAsync(word_id);
             return Ok(response);
         }
-/*
+
         [HttpPut]
         public async Task<IActionResult> UpdateWord(Word word)
         {
             Response response = await wordRepository.UpdateWordAsync(word);
             return Ok(response);
-        }*/
+        }
     }
 }
 

@@ -48,8 +48,7 @@ namespace DotNetBack.Models
             string translation,
             int? categoryId,
             string imgLink,
-            int repetitionNum,
-            DateTime repetitionDate)
+            int repetitionNum)
         {
             return new Word(wordId, name, translation, categoryId, imgLink, repetitionNum);
         }
