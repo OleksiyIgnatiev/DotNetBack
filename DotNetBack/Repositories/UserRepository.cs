@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using DotNetBack.Models;
 using DotNetBack.Repositories;
@@ -19,17 +20,82 @@ namespace DotNetBack.Repositories
             _connectionString = configuration.GetConnectionString("ppDBCon");
         }
 
+        private static string HashPassword(string password)
+        {
+            if (password == null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            // Генерация соли
+            using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(password, 16, 1000))
+            {
+                byte[] salt = bytes.Salt;
+                byte[] buffer2 = bytes.GetBytes(32);
+
+                byte[] dst = new byte[49];
+                Buffer.BlockCopy(salt, 0, dst, 1, 16);
+                Buffer.BlockCopy(buffer2, 0, dst, 17, 32);
+                return Convert.ToBase64String(dst);
+            }
+        }
+
+        private static bool VerifyHashedPassword(string hashedPassword, string password)
+        {
+            if (hashedPassword == null)
+            {
+                return false;
+            }
+            if (password == null)
+            {
+                throw new ArgumentNullException(nameof(password));
+            }
+
+            byte[] src = Convert.FromBase64String(hashedPassword);
+            if (src.Length != 49 || src[0] != 0)
+            {
+                return false;
+            }
+
+            byte[] salt = new byte[16];
+            Buffer.BlockCopy(src, 1, salt, 0, 16);
+            byte[] storedHash = new byte[32];
+            Buffer.BlockCopy(src, 17, storedHash, 0, 32);
+
+            using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(password, salt, 1000))
+            {
+                byte[] computedHash = bytes.GetBytes(32);
+                return ByteArraysEqual(storedHash, computedHash);
+            }
+        }
+
+        private static bool ByteArraysEqual(byte[] a, byte[] b)
+        {
+            if (a.Length != b.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (a[i] != b[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public async Task<bool> LoginAsync(string username, string passwordHash)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM Users WHERE username = @username AND password = @passwordHash", connection))
+                using (SqlCommand command = new SqlCommand("SELECT password FROM Users WHERE username = @username", connection))
                 {
                     command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@passwordHash", passwordHash);
-                    int count = (int)await command.ExecuteScalarAsync();
-                    return count > 0;
+                    string result = (string)await command.ExecuteScalarAsync();
+                    return (VerifyHashedPassword(result, passwordHash));
                 }
             }
         }
@@ -60,7 +126,7 @@ namespace DotNetBack.Repositories
                     {
                         command.Parameters.AddWithValue("@username", username);
                         command.Parameters.AddWithValue("@Email", email);
-                        command.Parameters.AddWithValue("@Password", password);
+                        command.Parameters.AddWithValue("@Password", HashPassword(password));
                         command.Parameters.AddWithValue("@NotificationTime", notificationTime);
                         command.Parameters.AddWithValue("@Level", 0);
                         command.Parameters.AddWithValue("@Subscription", 0);
@@ -72,7 +138,7 @@ namespace DotNetBack.Repositories
                         int userId = Convert.ToInt32(await command.ExecuteScalarAsync());
 
                         // Read JSON file content
-                        string jsonFilePath = "C:/Users/Empty/source/repos/DotNetBack/DotNetBack/TemplateData.json";
+                        string jsonFilePath = "D:/development/DotNetBack/DotNetBack/TemplateData.json";
                         string jsonContent = await File.ReadAllTextAsync(jsonFilePath);
 
                         // Deserialize JSON to object
