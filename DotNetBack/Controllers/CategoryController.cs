@@ -7,17 +7,17 @@ namespace DotNetBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class сategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryController(ICategoryRepository categoryRepository)
+        public сategoryController(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
 
         // GET: /api/category/user/:user_id
-        [HttpGet("user/{user_id}")]
+        [HttpGet("{user_id}")]
         public async Task<IActionResult> GetUserCategories(int user_id)
         {
             var categories = await _categoryRepository.GetUserCategoriesAsync(user_id);
