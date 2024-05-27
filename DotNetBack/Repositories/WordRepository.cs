@@ -106,7 +106,7 @@ namespace DotNetBack.Repositories
                 if (result == 0)
                 {
                     response.StatusCode = 500;
-                    response.Message = "Such word does not exist";
+                    response.Message = "Such word does *not exist";
                     return response;
                 }
 

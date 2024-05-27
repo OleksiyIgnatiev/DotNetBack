@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Azure;
 using DotNetBack.Models;
 using DotNetBack.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -106,6 +107,8 @@ namespace DotNetBack.Repositories
             {
                 await connection.OpenAsync();
 
+                List<int> list = new List<int>();
+
                 // Calculate notification_time to be one day after registration
                 DateTime notificationTime = DateTime.Now.AddDays(1);
                 DateTime subscriptionPeriod = DateTime.Now;
@@ -147,21 +150,28 @@ namespace DotNetBack.Repositories
                         // Insert categories associated with the user
                         foreach (var category in data.Categories)
                         {
-                            using (SqlCommand addCategoryCommand = new SqlCommand(
-                                "INSERT INTO Category (category_name, user_id) " +
-                                "VALUES (@categoryName, @userId)",
-                                connection, transaction))
+                            try
                             {
-                                addCategoryCommand.Parameters.AddWithValue("@categoryName", category.CategoryName);
-                                addCategoryCommand.Parameters.AddWithValue("@userId", userId);
-                                await addCategoryCommand.ExecuteNonQueryAsync();
+
+                                SqlCommand CatCommand = new SqlCommand("INSERT INTO Category (category_name, user_id) " +
+                                    "VALUES (@CategoryName, @UserId); SELECT SCOPE_IDENTITY();",connection,transaction);
+
+                                CatCommand.Parameters.AddWithValue("@CategoryName", category.CategoryName);
+                                CatCommand.Parameters.AddWithValue("@UserId", userId);
+
+                                int CategoryId = Convert.ToInt32(await CatCommand.ExecuteScalarAsync());
+
+                                list.Add(CategoryId);
+                            }
+                            catch
+                            {
+                                //Шо хочеш
                             }
                         }
 
-                        // Insert words associated with the user's categories
                         foreach (var word in data.Words)
                         {
-                            int categoryId = word.CategoryId ?? 0; // Consider null categoryId
+                            int categoryId = list[word.CategoryId-1]; // Consider null categoryId
                             using (SqlCommand addWordCommand = new SqlCommand(
                                 "INSERT INTO Word (name, translation, category_id, img_link, repetition_num) " +
                                 "VALUES (@name, @translation, @categoryId, @imgLink, @repetitionNum)",
