@@ -11,8 +11,7 @@ namespace DotNetBack.Models
             string translation,
             int? categoryId,
             string imgLink,
-            int repetitionNum,
-            DateTime repetitionDate)
+            int repetitionNum)
         {
             WordId = wordId;
             Name = name;
@@ -20,7 +19,6 @@ namespace DotNetBack.Models
             CategoryId = categoryId;
             ImgLink = imgLink;
             RepetitionNum = repetitionNum;
-            RepetitionDate = repetitionDate;
         }
 
         public Word() { }
@@ -43,8 +41,6 @@ namespace DotNetBack.Models
         [Required]
         public int RepetitionNum { get;  set; }
 
-        [Required]
-        public DateTime RepetitionDate { get;  set; }
 
         public static Word Create(
             int wordId,
@@ -55,7 +51,7 @@ namespace DotNetBack.Models
             int repetitionNum,
             DateTime repetitionDate)
         {
-            return new Word(wordId, name, translation, categoryId, imgLink, repetitionNum, repetitionDate);
+            return new Word(wordId, name, translation, categoryId, imgLink, repetitionNum);
         }
     }
     

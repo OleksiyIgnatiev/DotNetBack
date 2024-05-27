@@ -20,9 +20,9 @@ namespace DotNetBack.Repositories
             return new SqlConnection(_configuration.GetConnectionString("ppDBCon"));
         }
 
-        public async Task<List<CategoryInfo>> GetUserCategoriesAsync(int user_id)
+        public async Task<List<Category>> GetUserCategoriesAsync(int user_id)
         {
-            var categoriesProgress = new List<CategoryInfo>();
+            var categoriesProgress = new List<Category>();
 
             using (var connection = GetConnection())
             {
@@ -42,11 +42,11 @@ namespace DotNetBack.Repositories
 
                     command.Parameters.AddWithValue("@UserId", user_id);
 
-                    using (var reader = await command.ExecuteReaderAsync())
+                    /*using (var reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
                         {
-                            var categoryProgress = new CategoryInfo
+                            var categoryProgress = new Category
                             {
                                 CategoryName = reader.GetString(reader.GetOrdinal("category_name")),
                                 CategoryLength = reader.GetInt32(reader.GetOrdinal("category_length")),
@@ -56,16 +56,16 @@ namespace DotNetBack.Repositories
                             };
                             categoriesProgress.Add(categoryProgress);
                         }
-                    }
+                    }*/
                 }
             }
 
             return categoriesProgress;
         }
 
-        public async Task<List<CategoryInfo>> FindCategoriesAsync(string query, int userId)
+        public async Task<List<Category>> FindCategoriesAsync(string query, int userId)
         {
-            var categoriesProgress = new List<CategoryInfo>();
+            var categoriesProgress = new List<Category>();
 
             using (var connection = GetConnection())
             {
@@ -84,14 +84,14 @@ namespace DotNetBack.Repositories
             AND c.user_id = @UserId
             GROUP BY c.category_id, c.category_name";
 
-                    command.Parameters.AddWithValue("@Query", "%" + query + "%");
+                    /*command.Parameters.AddWithValue("@Query", "%" + query + "%");
                     command.Parameters.AddWithValue("@UserId", userId);
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
                         {
-                            var categoryProgress = new CategoryInfo
+                            var categoryProgress = new Category
                             {
                                 CategoryName = reader.GetString(reader.GetOrdinal("category_name")),
                                 CategoryLength = reader.GetInt32(reader.GetOrdinal("category_length")),
@@ -101,7 +101,7 @@ namespace DotNetBack.Repositories
                             };
                             categoriesProgress.Add(categoryProgress);
                         }
-                    }
+                    }*/
                 }
             }
 

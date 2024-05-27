@@ -91,7 +91,7 @@ namespace DotNetBack.Repositories
 
         }
 
-        public async Task<Response> UpdateWordAsync(Word word)
+       /* public async Task<Response> UpdateWordAsync(Word word)
         {
             Response response = new Response();
             string date = $"{word.RepetitionDate.Year}-{word.RepetitionDate.Month}-{word.RepetitionDate.Day}";
@@ -119,9 +119,9 @@ namespace DotNetBack.Repositories
                 response.StatusCode = 500;
             }
             return response;
-        }
+        }*/
 
-        public async Task<int> AddWordAsync(Word word)
+        /*public async Task<int> AddWordAsync(Word word)
         {
             Response response = new Response();
             var connection = GetConnection();
@@ -142,6 +142,6 @@ namespace DotNetBack.Repositories
             {
                 return 0;
             }
-        }
+        }*/
     }
 }

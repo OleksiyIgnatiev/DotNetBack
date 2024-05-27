@@ -29,7 +29,7 @@ namespace DotNetBack.Controllers
             return Ok(words);
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<IActionResult> CreateWord([FromBody] Word word)
         {
             if (word == null)
@@ -39,7 +39,7 @@ namespace DotNetBack.Controllers
 
             int response = await wordRepository.AddWordAsync(word);
             return Ok(response);
-        }
+        }*/
 
         [HttpDelete("{word_id}")]
         public async Task<IActionResult> DeleteWord(int word_id)
@@ -47,13 +47,13 @@ namespace DotNetBack.Controllers
             Response response = await wordRepository.DeleteWordAsync(word_id);
             return Ok(response);
         }
-
+/*
         [HttpPut]
         public async Task<IActionResult> UpdateWord(Word word)
         {
             Response response = await wordRepository.UpdateWordAsync(word);
             return Ok(response);
-        }
+        }*/
     }
 }
 

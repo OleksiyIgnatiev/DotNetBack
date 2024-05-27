@@ -8,9 +8,9 @@ namespace DotNetBack.Repositories
 
         Task<List<Word>> GetWordsAsync(int category_id);
        
-        Task<int> AddWordAsync(Word category);
+       /* Task<int> AddWordAsync(Word category);*/
 
-        Task<Response> UpdateWordAsync(Word word);
+        /*Task<Response> UpdateWordAsync(Word word);*/
     }
 }
  
