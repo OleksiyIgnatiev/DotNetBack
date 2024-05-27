@@ -9,7 +9,7 @@ namespace DotNetBack.Models
             int wordId,
             string name,
             string translation,
-            int? categoryId,
+            int categoryId,
             string imgLink,
             int repetitionNum)
         {
@@ -33,7 +33,7 @@ namespace DotNetBack.Models
         public string Translation { get;  set; }
 
         [Required]
-        public int? CategoryId { get;  set; }
+        public int CategoryId { get;  set; }
 
         [Required]
         public string ImgLink { get;  set; }
@@ -46,7 +46,7 @@ namespace DotNetBack.Models
             int wordId,
             string name,
             string translation,
-            int? categoryId,
+            int categoryId,
             string imgLink,
             int repetitionNum)
         {
