@@ -42,7 +42,7 @@ namespace DotNetBack.Repositories
 
                     command.Parameters.AddWithValue("@UserId", user_id);
 
-                    /*using (var reader = await command.ExecuteReaderAsync())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
                         {
@@ -56,7 +56,7 @@ namespace DotNetBack.Repositories
                             };
                             categoriesProgress.Add(categoryProgress);
                         }
-                    }*/
+                    }
                 }
             }
 
@@ -84,7 +84,7 @@ namespace DotNetBack.Repositories
             AND c.user_id = @UserId
             GROUP BY c.category_id, c.category_name";
 
-                    /*command.Parameters.AddWithValue("@Query", "%" + query + "%");
+                    command.Parameters.AddWithValue("@Query", "%" + query + "%");
                     command.Parameters.AddWithValue("@UserId", userId);
 
                     using (var reader = await command.ExecuteReaderAsync())
@@ -101,7 +101,7 @@ namespace DotNetBack.Repositories
                             };
                             categoriesProgress.Add(categoryProgress);
                         }
-                    }*/
+                    }
                 }
             }
 

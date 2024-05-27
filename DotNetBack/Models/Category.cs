@@ -13,10 +13,8 @@ namespace DotNetBack.Models
 
         public int UserId { get; set; }
 
-        public virtual User User { get; set; } // Assuming a User class exists
-
-        public int WordCount { get; set; }
-        public float PercentLearned { get; set; }
+        public int CategoryLength { get; set; }
+        public double ProgressionPercentage { get; set; }
     }
 }
 
