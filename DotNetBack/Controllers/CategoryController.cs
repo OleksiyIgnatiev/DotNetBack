@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using DotNetBack.Models;
 using DotNetBack.Repositories;
 
@@ -7,11 +6,11 @@ namespace DotNetBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class сategoryController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public сategoryController(ICategoryRepository categoryRepository)
+        public CategoryController(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
@@ -21,7 +20,7 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> GetUserCategories(int user_id)
         {
             var categories = await _categoryRepository.GetUserCategoriesAsync(user_id);
-            return Ok(new Response(200, "Categories retrieved successfully.", categories));
+            return Ok(categories);
         }
 
         // GET: /api/category/find/:query
@@ -29,7 +28,7 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> FindCategories(string query, [FromQuery] int user_id)
         {
             var categories = await _categoryRepository.FindCategoriesAsync(query, user_id);
-            return Ok(new Response(200, "Categories found successfully.", categories));
+            return Ok(categories);
         }
 
         // POST: /api/category
@@ -38,11 +37,11 @@ namespace DotNetBack.Controllers
         {
             if (category == null)
             {
-                return BadRequest(new Response(400, "Category is null."));
+                return BadRequest();
             }
 
             var categoryId = await _categoryRepository.AddCategoryAsync(category);
-            return Ok(new Response(201, "Category created successfully.", new { CategoryId = categoryId }));
+            return Ok(new { CategoryId = categoryId });
         }
 
         // PUT: /api/category
@@ -51,11 +50,11 @@ namespace DotNetBack.Controllers
         {
             if (category == null)
             {
-                return BadRequest(new Response(400, "Category is null."));
+                return BadRequest();
             }
 
             await _categoryRepository.UpdateCategoryAsync(category);
-            return Ok(new Response(200, "Category updated successfully."));
+            return Ok();
         }
 
         // DELETE: /api/category
@@ -63,7 +62,7 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> DeleteCategory(int category_id)
         {
             await _categoryRepository.DeleteCategoryAsync(category_id);
-            return Ok(new Response(200, "Category deleted successfully."));
+            return Ok();
         }
 
         // PUT: /api/category/reset-progress/:category_id
@@ -71,7 +70,7 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> ResetProgress(int category_id)
         {
             await _categoryRepository.ResetProgressAsync(category_id);
-            return Ok(new Response(200, "Category progress reset successfully."));
+            return Ok();
         }
 
         // PUT: /api/category/clear-content/:category_id
@@ -79,7 +78,7 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> ClearContent(int category_id)
         {
             await _categoryRepository.ClearContentAsync(category_id);
-            return Ok(new Response(200, "Category content cleared successfully."));
+            return Ok();
         }
     }
 }
