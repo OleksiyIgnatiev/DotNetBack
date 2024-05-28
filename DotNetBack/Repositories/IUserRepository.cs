@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotNetBack.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,18 +7,18 @@ namespace DotNetBack.Repositories
 {
     public interface IUserRepository
     {
-        Task<bool> LoginAsync(string username, string passwordHash);
-        Task RegisterAsync(string username, string email, string password);
-        Task UpdateNotificationAsync(int userId, string notificationType, DateTime notificationTime);
-        Task UpdateUserAsync(int userId, string username, string email, string password);
-        Task UpdateSubscriptionAsync(int userId, string subscription, DateTime subscriptionPeriod);
+        Task<Response> LoginAsync(string username, string passwordHash);
+        Task<Response> RegisterAsync(string username, string email, string password);
+        Task<Response> UpdateNotificationAsync(int userId, string notificationType, DateTime notificationTime);
+        Task<Response> UpdateUserAsync(int userId, string username, string email, string password);
+        Task<Response> UpdateSubscriptionAsync(int userId, string subscription, DateTime subscriptionPeriod);
         //Task LogoutAsync(int userId);
-        Task<IEnumerable<object>> GetAllUsersAsync();
+        Task<Response> GetAllUsersAsync();
         //Task<object> AdminActionAsync(int userId);
-        Task DeleteUserAsync(int userId);
+        Task<Response> DeleteUserAsync(int userId);
         //Task<IEnumerable<object>> ShareSuccessesAsync(int userId);
-        Task<IEnumerable<object>> GetCalendarAsync(int userId);
-        Task<object> GetRecordAsync(int userId);
-        Task<object> GetUserInfoAsync(int userId);
+        Task<Response> GetCalendarAsync(int userId);
+        Task<Response> GetRecordAsync(int userId);
+        Task<Response> GetUserInfoAsync(int userId);
     }
 }

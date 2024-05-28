@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using Azure;
 using DotNetBack.Models;
 using DotNetBack.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -87,23 +86,37 @@ namespace DotNetBack.Repositories
             return true;
         }
 
-        public async Task<bool> LoginAsync(string username, string passwordHash)
+        public async Task<Response> LoginAsync(string username, string passwordHash)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            Response response = new Response();
+            try
             {
-                await connection.OpenAsync();
-                using (SqlCommand command = new SqlCommand("SELECT password FROM Users WHERE username = @username", connection))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@username", username);
-                    string result = (string)await command.ExecuteScalarAsync();
-                    return (VerifyHashedPassword(result, passwordHash));
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("SELECT password FROM Users WHERE username = @username", connection))
+                    {
+                        command.Parameters.AddWithValue("@username", username);
+                        string result = (string)await command.ExecuteScalarAsync();
+                        response.Data = (VerifyHashedPassword(result, passwordHash));
+                        return response;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public async Task RegisterAsync(string username, string email, string password)
+        public async Task<Response> RegisterAsync(string username, string email, string password)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            Response response = new Response();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
@@ -117,9 +130,6 @@ namespace DotNetBack.Repositories
 
                 // Begin transaction
                 SqlTransaction transaction = connection.BeginTransaction();
-
-                try
-                {
                     // Insert user into Users table
                     using (SqlCommand command = new SqlCommand(
                         "INSERT INTO Users (username, email, password, notification_time, level, subscription, subscription_period, notification_type, role) " +
@@ -163,9 +173,10 @@ namespace DotNetBack.Repositories
 
                                 list.Add(CategoryId);
                             }
-                            catch
+                            catch (Exception ex)
                             {
-                                //Шо хочеш
+                                response.StatusCode = 500;
+                                response.Message = ex.Message;
                             }
                         }
 
@@ -185,18 +196,16 @@ namespace DotNetBack.Repositories
                                 await addWordCommand.ExecuteNonQueryAsync();
                             }
                         }
-
-                        // Commit the transaction
                         transaction.Commit();
                     }
                 }
-                catch (Exception)
-                {
-                    // Rollback the transaction if an error occurs
-                    transaction.Rollback();
-                    throw; // Re-throw the exception to the caller
-                }
             }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
 
@@ -209,97 +218,147 @@ namespace DotNetBack.Repositories
 
 
 
-        public async Task UpdateNotificationAsync(int userId, string notificationType, DateTime notificationTime)
+        public async Task<Response> UpdateNotificationAsync(int userId, string notificationType, DateTime notificationTime)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            Response response = new Response();
+            try
             {
-                await connection.OpenAsync();
-                using (SqlCommand command = new SqlCommand("UPDATE Users SET notification_type = @notificationType, notification_time = @notificationTime WHERE user_id = @userId", connection))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@userId", userId);
-                    command.Parameters.AddWithValue("@notificationType", notificationType);
-                    command.Parameters.AddWithValue("@notificationTime", notificationTime);
-                    await command.ExecuteNonQueryAsync();
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("UPDATE Users SET notification_type = @notificationType, notification_time = @notificationTime WHERE user_id = @userId", connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.Parameters.AddWithValue("@notificationType", notificationType);
+                        command.Parameters.AddWithValue("@notificationTime", notificationTime);
+                        await command.ExecuteNonQueryAsync();
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public async Task UpdateUserAsync(int userId, string username, string email, string password)
+        public async Task<Response> UpdateUserAsync(int userId, string username, string email, string password)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            Response response = new Response();
+            try
             {
-                await connection.OpenAsync();
-                using (SqlCommand command = new SqlCommand("UPDATE Users SET username = @username, email = @Email, password = @Password WHERE user_id = @userId", connection))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@userId", userId);
-                    command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@Email", email);
-                    command.Parameters.AddWithValue("@Password", password);
-                    await command.ExecuteNonQueryAsync();
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("UPDATE Users SET username = @username, email = @Email, password = @Password WHERE user_id = @userId", connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.Parameters.AddWithValue("@username", username);
+                        command.Parameters.AddWithValue("@Email", email);
+                        command.Parameters.AddWithValue("@Password", password);
+                        await command.ExecuteNonQueryAsync();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public async Task UpdateSubscriptionAsync(int userId, string subscription, DateTime subscriptionPeriod)
+        public async Task<Response> UpdateSubscriptionAsync(int userId, string subscription, DateTime subscriptionPeriod)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            Response response = new Response();
+            try
             {
-                await connection.OpenAsync();
-                using (SqlCommand command = new SqlCommand("UPDATE Users SET subscription = @subscription, subscription_period = @subscriptionPeriod WHERE user_id = @userId", connection))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@userId", userId);
-                    command.Parameters.AddWithValue("@subscription", subscription);
-                    command.Parameters.AddWithValue("@subscriptionPeriod", subscriptionPeriod);
-                    await command.ExecuteNonQueryAsync();
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("UPDATE Users SET subscription = @subscription, subscription_period = @subscriptionPeriod WHERE user_id = @userId", connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.Parameters.AddWithValue("@subscription", subscription);
+                        command.Parameters.AddWithValue("@subscriptionPeriod", subscriptionPeriod);
+                        await command.ExecuteNonQueryAsync();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         //public async Task LogoutAsync(int userId) //TODO реализовать
         //{
         //}
 
-        public async Task<IEnumerable<object>> GetAllUsersAsync()
+        public async Task<Response> GetAllUsersAsync()
         {
-            List<object> users = new List<object>();
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            Response response = new Response();
+            try
             {
-                await connection.OpenAsync();
-                using (SqlCommand command = new SqlCommand("SELECT user_id, username, email, password FROM Users", connection))
+                List<object> users = new List<object>();
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("SELECT user_id, username, email, password FROM Users", connection))
                     {
-                        while (await reader.ReadAsync())
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
-                            users.Add(new
+                            while (await reader.ReadAsync())
                             {
-                                UserId = reader.GetInt32(0),
-                                Username = reader.GetString(1),
-                                Email = reader.GetString(2),
-                                Password = reader.GetString(3)
-                            });
+                                users.Add(new
+                                {
+                                    UserId = reader.GetInt32(0),
+                                    Username = reader.GetString(1),
+                                    Email = reader.GetString(2),
+                                    Password = reader.GetString(3)
+                                });
+                            }
+                            response.Data = users;
                         }
                     }
                 }
             }
-            return users;
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         //public async Task<object> AdminActionAsync(int userId) //TODO реализовать
         //{
         //}
 
-        public async Task DeleteUserAsync(int userId)
+        public async Task<Response> DeleteUserAsync(int userId)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            Response response = new Response();
+            try
             {
-                await connection.OpenAsync();
-                using (SqlCommand command = new SqlCommand("DELETE FROM Users WHERE user_id = @userId", connection))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@userId", userId);
-                    await command.ExecuteNonQueryAsync();
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("DELETE FROM Users WHERE user_id = @userId", connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userId);
+                        await command.ExecuteNonQueryAsync();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         //public async Task<IEnumerable<object>> ShareSuccessesAsync(int userId)
@@ -309,225 +368,264 @@ namespace DotNetBack.Repositories
         //    }
         //}
 
-        public async Task<IEnumerable<object>> GetCalendarAsync(int userId)
+        public async Task<Response> GetCalendarAsync(int userId)
         {
-            List<object> calendar = new List<object>();
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            Response response = new Response();
+            try
             {
-                await connection.OpenAsync();
-                using (SqlCommand command = new SqlCommand(@"
-                WITH RepeatedWords AS (
-                    SELECT
-                        r.repetition_date,
-                        COUNT(DISTINCT r.word_id) AS repeated_count
-                    FROM
-                        Repetition r
-                    JOIN Word w ON r.word_id = w.word_id
-                    JOIN Category c ON w.category_id = c.category_id
-                    WHERE
-                        c.user_id = @userId AND
-                        r.repetition_date >= DATEADD(DAY, -7, GETDATE())
-                    GROUP BY
-                        r.repetition_date
-                ),
-                LearnedWords AS (
-                    SELECT
-                        r.repetition_date,
-                        COUNT(DISTINCT r.word_id) AS learned_count
-                    FROM
-                        Repetition r
-                    JOIN Word w ON r.word_id = w.word_id
-                    JOIN Category c ON w.category_id = c.category_id
-                    JOIN (
-                        SELECT
-                            word_id,
-                            MIN(repetition_date) AS first_repetition_date
-                        FROM
-                            Repetition
-                        GROUP BY
-                            word_id
-                    ) AS FirstRepetitions ON r.word_id = FirstRepetitions.word_id AND r.repetition_date = FirstRepetitions.first_repetition_date
-                    WHERE
-                        c.user_id = @userId AND
-                        r.repetition_date >= DATEADD(DAY, -7, GETDATE())
-                    GROUP BY
-                        r.repetition_date
-                )
-                SELECT
-                    COALESCE(rw.repetition_date, lw.repetition_date) AS repetition_date,
-                    COALESCE(rw.repeated_count, 0) AS repeated_count,
-                    COALESCE(lw.learned_count, 0) AS learned_count
-                FROM
-                    RepeatedWords rw
-                FULL OUTER JOIN
-                    LearnedWords lw ON rw.repetition_date = lw.repetition_date
-                ORDER BY
-                repetition_date;", connection))
+                List<object> calendar = new List<object>();
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@userId", userId);
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            calendar.Add(new
-                            {
-                                repetition_date = reader.GetDateTime(0),
-                                repetition_num = reader.GetInt32(1),
-                                learned_num = reader.GetInt32(2)
-                            });
-                        }
-                    }
-                }
-            }
-            return calendar;
-        }
-
-
-
-        public async Task<object> GetRecordAsync(int userId)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                using (SqlCommand command = new SqlCommand(@"
-                    WITH UserRepetitions AS (
-                        SELECT 
-                            c.user_id,
-                            r.word_id,
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand(@"
+                    WITH RepeatedWords AS (
+                        SELECT
                             r.repetition_date,
-                            LAG(r.repetition_date, 1) OVER (PARTITION BY c.user_id ORDER BY r.repetition_date) AS prev_date
-                        FROM 
-                            Word w
-                        JOIN 
-                            Repetition r ON w.word_id = r.word_id
-                        JOIN 
-                            Category c ON w.category_id = c.category_id
-                        WHERE 
-                            c.user_id = @UserId
+                            COUNT(DISTINCT r.word_id) AS repeated_count
+                        FROM
+                            Repetition r
+                        JOIN Word w ON r.word_id = w.word_id
+                        JOIN Category c ON w.category_id = c.category_id
+                        WHERE
+                            c.user_id = @userId AND
+                            r.repetition_date >= DATEADD(DAY, -7, GETDATE())
+                        GROUP BY
+                            r.repetition_date
                     ),
-                    ConsecutiveDays AS (
+                    LearnedWords AS (
                         SELECT
-                            user_id,
-                            repetition_date,
-                            CASE 
-                                WHEN DATEDIFF(day, prev_date, repetition_date) = 1 THEN 0
-                                ELSE 1
-                            END AS is_start_of_streak
-                        FROM 
-                            UserRepetitions
-                    ),
-                    Streaks AS (
-                        SELECT
-                            user_id,
-                            repetition_date,
-                            SUM(is_start_of_streak) OVER (PARTITION BY user_id ORDER BY repetition_date ROWS UNBOUNDED PRECEDING) AS streak_id
-                        FROM 
-                            ConsecutiveDays
-                    ),
-                    StreakLengths AS (
-                        SELECT
-                            user_id,
-                            streak_id,
-                            COUNT(*) AS streak_length,
-                            MAX(repetition_date) AS streak_end_date
-                        FROM 
-                            Streaks
-                        GROUP BY 
-                            user_id, streak_id
+                            r.repetition_date,
+                            COUNT(DISTINCT r.word_id) AS learned_count
+                        FROM
+                            Repetition r
+                        JOIN Word w ON r.word_id = w.word_id
+                        JOIN Category c ON w.category_id = c.category_id
+                        JOIN (
+                            SELECT
+                                word_id,
+                                MIN(repetition_date) AS first_repetition_date
+                            FROM
+                                Repetition
+                            GROUP BY
+                                word_id
+                        ) AS FirstRepetitions ON r.word_id = FirstRepetitions.word_id AND r.repetition_date = FirstRepetitions.first_repetition_date
+                        WHERE
+                            c.user_id = @userId AND
+                            r.repetition_date >= DATEADD(DAY, -7, GETDATE())
+                        GROUP BY
+                            r.repetition_date
                     )
-                    SELECT 
-                        MAX(streak_length) AS max_streak_length_ever,
-                        MAX(CASE 
-                            WHEN streak_end_date = CAST(GETDATE() AS DATE) THEN streak_length
-                            ELSE 0
-                        END) AS current_streak_length
-                    FROM 
-                        StreakLengths
-                    WHERE 
-                        user_id = @UserId;
-                ", connection))
-                {
-                    command.Parameters.AddWithValue("@UserId", userId);
-
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    SELECT
+                        COALESCE(rw.repetition_date, lw.repetition_date) AS repetition_date,
+                        COALESCE(rw.repeated_count, 0) AS repeated_count,
+                        COALESCE(lw.learned_count, 0) AS learned_count
+                    FROM
+                        RepeatedWords rw
+                    FULL OUTER JOIN
+                        LearnedWords lw ON rw.repetition_date = lw.repetition_date
+                    ORDER BY
+                    repetition_date;", connection))
                     {
-                        if (await reader.ReadAsync())
+                        command.Parameters.AddWithValue("@userId", userId);
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
-                            return new
+                            while (await reader.ReadAsync())
                             {
-                                consecutive_days = reader.GetInt32(1),
-                                consecutive_days_record = reader.GetInt32(0)
-                            };
-                        }
-                        else
-                        {
-                            return null;
+                                calendar.Add(new
+                                {
+                                    repetition_date = reader.GetDateTime(0),
+                                    repetition_num = reader.GetInt32(1),
+                                    learned_num = reader.GetInt32(2)
+                                });
+                            }
                         }
                     }
                 }
+                response.Data = calendar;
             }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
 
-        public async Task<object> GetUserInfoAsync(int userId)
-        {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                using (SqlCommand command = new SqlCommand("SELECT username, email, level, subscription, subscription_period, notification_type, notification_time FROM Users WHERE user_id = @userId", connection))
-                {
-                    command.Parameters.AddWithValue("@userId", userId);
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                    {
-                        if (await reader.ReadAsync())
-                        {
-                            return new
-                            {
-                                Username = reader.GetString(0),
-                                Email = reader.GetString(1),
-                                Level = reader.GetInt32(2),
-                                Subscription = reader.GetString(3),
-                                SubscriptionPeriod = reader.GetDateTime(4),
-                                NotificationType = reader.GetString(5),
-                                NotificationTime = reader.GetTimeSpan(6)
-                            };
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-        private async Task<object> GetUserByEmailAsync(string email)
-        {
-            User user = null;
-            string connectionString = "ppDBCon";
-            string query = "SELECT username, email, level, subscription, subscription_period, notification_type, notification_time FROM Users WHERE email = @Email";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+        public async Task<Response> GetRecordAsync(int userId)
+        {
+            Response response = new Response();
+            try
             {
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@Email", email);
-                    connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand(@"
+                        WITH UserRepetitions AS (
+                            SELECT 
+                                c.user_id,
+                                r.word_id,
+                                r.repetition_date,
+                                LAG(r.repetition_date, 1) OVER (PARTITION BY c.user_id ORDER BY r.repetition_date) AS prev_date
+                            FROM 
+                                Word w
+                            JOIN 
+                                Repetition r ON w.word_id = r.word_id
+                            JOIN 
+                                Category c ON w.category_id = c.category_id
+                            WHERE 
+                                c.user_id = @UserId
+                        ),
+                        ConsecutiveDays AS (
+                            SELECT
+                                user_id,
+                                repetition_date,
+                                CASE 
+                                    WHEN DATEDIFF(day, prev_date, repetition_date) = 1 THEN 0
+                                    ELSE 1
+                                END AS is_start_of_streak
+                            FROM 
+                                UserRepetitions
+                        ),
+                        Streaks AS (
+                            SELECT
+                                user_id,
+                                repetition_date,
+                                SUM(is_start_of_streak) OVER (PARTITION BY user_id ORDER BY repetition_date ROWS UNBOUNDED PRECEDING) AS streak_id
+                            FROM 
+                                ConsecutiveDays
+                        ),
+                        StreakLengths AS (
+                            SELECT
+                                user_id,
+                                streak_id,
+                                COUNT(*) AS streak_length,
+                                MAX(repetition_date) AS streak_end_date
+                            FROM 
+                                Streaks
+                            GROUP BY 
+                                user_id, streak_id
+                        )
+                        SELECT 
+                            MAX(streak_length) AS max_streak_length_ever,
+                            MAX(CASE 
+                                WHEN streak_end_date = CAST(GETDATE() AS DATE) THEN streak_length
+                                ELSE 0
+                            END) AS current_streak_length
+                        FROM 
+                            StreakLengths
+                        WHERE 
+                            user_id = @UserId;
+                    ", connection))
                     {
-                        if (await reader.ReadAsync())
+                        command.Parameters.AddWithValue("@UserId", userId);
+
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
-                            return new
+                            if (await reader.ReadAsync())
                             {
-                                Username = reader.GetString(0),
-                                Email = reader.GetString(1),
-                                Level = reader.GetInt32(2),
-                                Subscription = reader.GetString(3),
-                                SubscriptionPeriod = reader.GetDateTime(4),
-                                NotificationType = reader.GetString(5),
-                                NotificationTime = reader.GetTimeSpan(6)
-                            };
+                                response.Data = new
+                                {
+                                    consecutive_days = reader.GetInt32(1),
+                                    consecutive_days_record = reader.GetInt32(0)
+                                };
+                            }
+                            else
+                            {
+                                response.Data = null;
+                            }
                         }
                     }
                 }
             }
-            return null;
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+
+
+        public async Task<Response> GetUserInfoAsync(int userId)
+        {
+            Response response = new Response();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("SELECT username, email, level, subscription, subscription_period, notification_type, notification_time FROM Users WHERE user_id = @userId", connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userId);
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                response.Data = new
+                                {
+                                    Username = reader.GetString(0),
+                                    Email = reader.GetString(1),
+                                    Level = reader.GetInt32(2),
+                                    Subscription = reader.GetString(3),
+                                    SubscriptionPeriod = reader.GetDateTime(4),
+                                    NotificationType = reader.GetString(5),
+                                    NotificationTime = reader.GetTimeSpan(6)
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+        private async Task<Response> GetUserByEmailAsync(string email)
+        {
+            Response response = new Response();
+            try
+            {
+                User user = null;
+                string connectionString = "ppDBCon";
+                string query = "SELECT username, email, level, subscription, subscription_period, notification_type, notification_time FROM Users WHERE email = @Email";
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Email", email);
+                        connection.Open();
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                response.Data = new
+                                {
+                                    Username = reader.GetString(0),
+                                    Email = reader.GetString(1),
+                                    Level = reader.GetInt32(2),
+                                    Subscription = reader.GetString(3),
+                                    SubscriptionPeriod = reader.GetDateTime(4),
+                                    NotificationType = reader.GetString(5),
+                                    NotificationTime = reader.GetTimeSpan(6)
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
     }
