@@ -6,11 +6,11 @@ namespace DotNetBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class сategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryController(ICategoryRepository categoryRepository)
+        public сategoryController(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
