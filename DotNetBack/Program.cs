@@ -9,10 +9,7 @@ builder.Services.AddControllers();
 
 // Configure Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
-});
+builder.Services.AddSwaggerGen();
 
 // Configure session
 builder.Services.AddDistributedMemoryCache();
@@ -26,14 +23,12 @@ builder.Services.AddSession(options =>
 // Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigins",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:3000", "http://localhost:5264", "https://accounts.google.com")
-                   .AllowAnyMethod()
-                   .AllowAnyHeader()
-                   .AllowCredentials();
-        });
+    options.AddPolicy("AllowAllOrigins", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
 });
 
 // Add your repositories
@@ -57,10 +52,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseSession(); // Use session
-
-app.UseCors("AllowSpecificOrigins"); // Используйте именованную политику CORS здесь
 
 app.UseAuthorization();
 

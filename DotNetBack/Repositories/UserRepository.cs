@@ -121,7 +121,7 @@ namespace DotNetBack.Repositories
                                 int userId = Convert.ToInt32(reader["user_id"]);
                                 string role = reader["role"].ToString();
 
-                                if(!VerifyHashedPassword(password, passwordHash))
+                                if (!VerifyHashedPassword(password, passwordHash))
                                 {
                                     response.Data = null;
                                     response.StatusCode = 500;
@@ -129,7 +129,7 @@ namespace DotNetBack.Repositories
                                     return response;
                                 }
 
-                                response.Data = new Login() {  userId = userId, role = role };
+                                response.Data = new Login() { userId = userId, role = role };
 
                                 return response;
                             }
@@ -158,19 +158,19 @@ namespace DotNetBack.Repositories
             try
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
+                {
+                    await connection.OpenAsync();
 
-                List<int> list = new List<int>();
+                    List<int> list = new List<int>();
 
-                // Calculate notification_time to be one day after registration
-                DateTime notificationTime = DateTime.Now.AddDays(1);
-                DateTime subscriptionPeriod = DateTime.Now;
-                string notificationType = "email";
-                string role = "user";
+                    // Calculate notification_time to be one day after registration
+                    DateTime notificationTime = DateTime.Now.AddDays(1);
+                    DateTime subscriptionPeriod = DateTime.Now;
+                    string notificationType = "email";
+                    string role = "user";
 
-                // Begin transaction
-                SqlTransaction transaction = connection.BeginTransaction();
+                    // Begin transaction
+                    SqlTransaction transaction = connection.BeginTransaction();
 
 
                     SqlCommand command = new SqlCommand($"select Count(*) from Users where username = '{username}'",
@@ -232,7 +232,7 @@ namespace DotNetBack.Repositories
                             {
 
                                 SqlCommand CatCommand = new SqlCommand("INSERT INTO Category (category_name, user_id) " +
-                                    "VALUES (@CategoryName, @UserId); SELECT SCOPE_IDENTITY();",connection,transaction);
+                                    "VALUES (@CategoryName, @UserId); SELECT SCOPE_IDENTITY();", connection, transaction);
 
                                 CatCommand.Parameters.AddWithValue("@CategoryName", category.CategoryName);
                                 CatCommand.Parameters.AddWithValue("@UserId", userId);
@@ -250,7 +250,7 @@ namespace DotNetBack.Repositories
 
                         foreach (var word in data.Words)
                         {
-                            int categoryId = list[word.CategoryId-1]; // Consider null categoryId
+                            int categoryId = list[word.CategoryId - 1]; // Consider null categoryId
                             using (SqlCommand addWordCommand = new SqlCommand(
                                 "INSERT INTO Word (name, translation, category_id, img_link, repetition_num) " +
                                 "VALUES (@name, @translation, @categoryId, @imgLink, @repetitionNum)",
@@ -303,7 +303,7 @@ namespace DotNetBack.Repositories
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.StatusCode = 500;
                 response.Message = ex.Message;
@@ -632,10 +632,27 @@ namespace DotNetBack.Repositories
                         {
                             if (await reader.ReadAsync())
                             {
-                                int userId = Convert.ToInt32(reader["user_id"]);
-                                string role = reader["role"].ToString();
+                                // Отримання значень з рядка результатів і заповнення об'єкта Response
+                                response.StatusCode = 200; // Успішний статус код
+                                response.Message = "User info retrieved successfully.";
 
-                                response.Data = new Login() { userId = userId, role = role };
+                                // Зчитування значень з рядка результатів
+                                response.Data = new
+                                {
+                                    Username = reader["username"].ToString(),
+                                    Email = reader["email"].ToString(),
+                                    Level = Convert.ToInt32(reader["level"]),
+                                    Subscription = reader["subscription"].ToString(),
+                                    SubscriptionPeriod = reader["subscription_period"].ToString(),
+                                    NotificationType = reader["notification_type"].ToString(),
+                                    NotificationTime = reader["notification_time"].ToString()
+                                };
+                            }
+                            else
+                            {
+                                // Якщо користувача з вказаним ID не знайдено
+                                response.StatusCode = 404; // Статус код для "Не знайдено"
+                                response.Message = "User not found.";
                             }
                         }
                     }
@@ -643,7 +660,8 @@ namespace DotNetBack.Repositories
             }
             catch (Exception ex)
             {
-                response.StatusCode = 500;
+                // Обробка помилок
+                response.StatusCode = 500; // Статус код для "Помилка сервера"
                 response.Message = ex.Message;
             }
             return response;
@@ -653,30 +671,34 @@ namespace DotNetBack.Repositories
             Response response = new Response();
             try
             {
-                User user = null;
-                string connectionString = "ppDBCon";
                 string query = "SELECT id, role FROM Users WHERE email = @Email";
 
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Email", email);
-                        connection.Open();
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        await connection.OpenAsync();
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
                             if (await reader.ReadAsync())
                             {
+                                // Отримання значень з рядка результатів і заповнення об'єкта Response
+                                response.StatusCode = 200; // Успішний статус код
+                                response.Message = "User info retrieved successfully.";
+
+                                // Зчитування значень з рядка результатів
                                 response.Data = new
                                 {
-                                    Username = reader.GetString(0),
-                                    Email = reader.GetString(1),
-                                    Level = reader.GetInt32(2),
-                                    Subscription = reader.GetString(3),
-                                    SubscriptionPeriod = reader.GetDateTime(4),
-                                    NotificationType = reader.GetString(5),
-                                    NotificationTime = reader.GetTimeSpan(6)
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    Role = reader["role"].ToString()
                                 };
+                            }
+                            else
+                            {
+                                // Якщо користувача з вказаною електронною поштою не знайдено
+                                response.StatusCode = 404; // Статус код для "Не знайдено"
+                                response.Message = "User not found.";
                             }
                         }
                     }
@@ -684,11 +706,11 @@ namespace DotNetBack.Repositories
             }
             catch (Exception ex)
             {
-                response.StatusCode = 500;
+                // Обробка помилок
+                response.StatusCode = 500; // Статус код для "Помилка сервера"
                 response.Message = ex.Message;
             }
             return response;
         }
-
     }
 }

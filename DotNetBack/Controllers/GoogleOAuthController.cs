@@ -22,7 +22,7 @@ namespace DotNetBack.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet]
+        [HttpGet("RedirectOnOAuthServer")]
         public IActionResult RedirectOnOAuthServer()
         {
             var codeVerifier = Guid.NewGuid().ToString();
@@ -36,6 +36,7 @@ namespace DotNetBack.Controllers
             return Redirect(url);
         }
 
+        [HttpGet("Code")]
         public async Task<IActionResult> CodeAsync(string code)
         {
             string codeVerifier = HttpContext.Session.GetString(PkceSessionKey);
@@ -59,7 +60,16 @@ namespace DotNetBack.Controllers
                 return StatusCode(500, response.Message);
             }
 
-            return Ok(response.Data); // Возвращаем информацию о найденном пользователе
+            if (response.StatusCode == 404)
+            {
+                return NotFound(response.Message);
+            }
+            else if (response.StatusCode == 500)
+            {
+                return StatusCode(500, response.Message);
+            }
+
+            return Ok(response.Data);
         }
     }
 }
