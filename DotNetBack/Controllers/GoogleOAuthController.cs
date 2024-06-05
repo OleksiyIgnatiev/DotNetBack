@@ -13,8 +13,7 @@ namespace DotNetBack.Controllers
     [Route("api/[controller]")]
     public class GoogleOAuthController : ControllerBase
     {
-        private const string RedirectUrl = "https://localhost:5001/GoogleOAuth/Code";
-        private const string Scope = "https://www.googleapis.com/auth/cloud-platform";
+        private const string RedirectUrl = "http://localhost:5264/api/GoogleOAuth/Code";
         private const string PkceSessionKey = "codeVerifier";
         private readonly IUserRepository _userRepository;
 
@@ -23,7 +22,7 @@ namespace DotNetBack.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet("RedirectOnOAuthServer")]
+        [HttpGet]
         public IActionResult RedirectOnOAuthServer()
         {
             var codeVerifier = Guid.NewGuid().ToString();
@@ -32,35 +31,35 @@ namespace DotNetBack.Controllers
 
             var codeChallenge = Sha256Helper.ComputeHash(codeVerifier);
 
-            var url = GoogleOAuthService.GenerateOAuthRequestUrl(Scope, RedirectUrl, codeChallenge);
+            var url = GoogleOAuthService.GenerateOAuthRequestUrl("openid email", RedirectUrl, codeChallenge);
+
             return Redirect(url);
         }
 
-        [HttpGet("Code")]
         public async Task<IActionResult> CodeAsync(string code)
         {
             string codeVerifier = HttpContext.Session.GetString(PkceSessionKey);
 
             var tokenResult = await GoogleOAuthService.ExchangeCodeOnTokenAsync(code, codeVerifier, RedirectUrl);
 
-            var refreshedToken = await GoogleOAuthService.RefreshTokenAsync(tokenResult.RefreshToken);
-
-            // Получаем электронную почту пользователя из токена результат
+            // Получаем адрес электронной почты пользователя из токена результат
             string userEmail = tokenResult.Email;
+
+            // Если адрес электронной почты не возвращается из токена, попробуйте получить его отдельным запросом к Google API
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                userEmail = await GoogleApiService.GetUserEmailAsync(tokenResult.AccessToken);
+            }
 
             // Извлекаем пользователя из базы данных по email
             var response = await _userRepository.GetUserByEmailAsync(userEmail);
 
-            if (response.StatusCode == 404)
-            {
-                return NotFound(response.Message);
-            }
-            else if (response.StatusCode == 500)
+            if (response.StatusCode == 500)
             {
                 return StatusCode(500, response.Message);
             }
 
-            return Ok(response.Data);
+            return Ok(response.Data); // Возвращаем информацию о найденном пользователе
         }
     }
 }

@@ -2,6 +2,7 @@
 using DotNetBack.Helpers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DotNetBack.Services
 {
@@ -18,14 +19,14 @@ namespace DotNetBack.Services
             var queryParams = new Dictionary<string, string>
             {
                 { "client_id", ClientId },
-                { "redirect_url", redirectUrl },
+                { "redirect_uri", redirectUrl },
                 { "response_type", "code" },
-                { "scope", scope },
+                { "scope", scope + " email" }, // добавляем разрешение на получение email
                 { "code_challenge", codeChallenge },
                 { "code_challenge_method", "S256" },
-                { "acces_type", "offline" }
+                { "access_type", "offline" }
             };
-            
+
             var url = QueryHelpers.AddQueryString(OAuthServerEndpoint, queryParams);
             return url;
         }
@@ -39,11 +40,17 @@ namespace DotNetBack.Services
                 { "code", code },
                 { "code_verifier", codeVerifier },
                 { "grant_type", "authorization_code" },
-                { "redirect_url", redirectUrl },
+                { "redirect_uri", redirectUrl },
                 { "scope", "openid email" }
             };
 
-            var tokenResult = await HttpClientHelper.SendPostRequest<TokenResult>(OAuthServerEndpoint, authParams);
+            using var httpClient = new HttpClient();
+            var response = await httpClient.PostAsync(TokenServerEndpoint, new FormUrlEncodedContent(authParams));
+            response.EnsureSuccessStatusCode();
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("Response content: " + responseContent);
+            var tokenResult = JsonConvert.DeserializeObject<TokenResult>(responseContent);
+            Console.WriteLine("Token result: " + JsonConvert.SerializeObject(tokenResult));
             return tokenResult;
         }
 
@@ -57,9 +64,7 @@ namespace DotNetBack.Services
                 { "refresh_token", refreshToken }
             };
 
-            var tokenResult = await HttpClientHelper.SendPostRequest<TokenResult>(TokenServerEndpoint, refreshParams);
-
-            return tokenResult;
+            return await HttpClientHelper.SendPostRequest<TokenResult>(TokenServerEndpoint, refreshParams);
         }
     }
 }

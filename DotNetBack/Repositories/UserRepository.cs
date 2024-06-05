@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using DotNetBack.Models;
 using DotNetBack.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -631,16 +632,10 @@ namespace DotNetBack.Repositories
                         {
                             if (await reader.ReadAsync())
                             {
-                                response.Data = new
-                                {
-                                    Username = reader.GetString(0),
-                                    Email = reader.GetString(1),
-                                    Level = reader.GetInt32(2),
-                                    Subscription = reader.GetString(3),
-                                    SubscriptionPeriod = reader.GetDateTime(4),
-                                    NotificationType = reader.GetString(5),
-                                    NotificationTime = reader.GetTimeSpan(6)
-                                };
+                                int userId = Convert.ToInt32(reader["user_id"]);
+                                string role = reader["role"].ToString();
+
+                                response.Data = new Login() { userId = userId, role = role };
                             }
                         }
                     }
@@ -660,7 +655,7 @@ namespace DotNetBack.Repositories
             {
                 User user = null;
                 string connectionString = "ppDBCon";
-                string query = "SELECT username, email, level, subscription, subscription_period, notification_type, notification_time FROM Users WHERE email = @Email";
+                string query = "SELECT id, role FROM Users WHERE email = @Email";
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
