@@ -9,9 +9,9 @@ namespace DotNetBack.Repositories
         Task<List<Category>> GetUserCategoriesAsync(int user_id);
         Task<List<Category>> FindCategoriesAsync(string query, int user_id);
         Task<int> AddCategoryAsync(Category category);
-        Task<Response> UpdateCategoryAsync(Category category);
-        Task<Response> DeleteCategoryAsync(int category_id);
-        Task<Response> ResetProgressAsync(int category_id);
-        Task<Response> ClearContentAsync(int category_id);
+        Task UpdateCategoryAsync(Category category);
+        Task DeleteCategoryAsync(int category_id);
+        Task ResetProgressAsync(int category_id);
+        Task ClearContentAsync(int category_id);
     }
 }

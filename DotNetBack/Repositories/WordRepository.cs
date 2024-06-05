@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Azure;
 using Response = DotNetBack.Models.Response;
+using System.Net.Http;
 
 
 namespace DotNetBack.Repositories
@@ -15,10 +16,12 @@ namespace DotNetBack.Repositories
     public class WordRepository : IWordRepository
     {
         private readonly IConfiguration _configuration;
+        private readonly HttpClient _httpClient;
 
-        public WordRepository(IConfiguration configuration)
+        public WordRepository(IConfiguration configuration, HttpClient httpClient)
         {
             _configuration = configuration;
+            _httpClient = httpClient;
         }
 
         private SqlConnection GetConnection()
@@ -39,10 +42,10 @@ namespace DotNetBack.Repositories
             {
                 await connection.OpenAsync();
 
-            var command = connection.CreateCommand();
+                var command = connection.CreateCommand();
 
                 command.CommandText = "SELECT * FROM Word WHERE category_id = @category_id";
-            command.Parameters.AddWithValue("@category_id", category_id);
+                command.Parameters.AddWithValue("@category_id", category_id);
 
                 var commandCheck = connection.CreateCommand();
                 commandCheck.CommandText = $"Select Count(*) FROM Word WHERE category_id = {category_id}";
@@ -60,17 +63,17 @@ namespace DotNetBack.Repositories
                 var reader = await command.ExecuteReaderAsync();
 
 
-            while (await reader.ReadAsync())
-            {
-                int word_id = Convert.ToInt32(reader["word_id"]);
-                string name = reader["name"].ToString();
-                string translation = reader["translation"].ToString();
-                string img_link = reader["img_link"].ToString();
-                int repetition_num = Convert.ToInt32(reader["repetition_num"]);
+                while (await reader.ReadAsync())
+                {
+                    int word_id = Convert.ToInt32(reader["word_id"]);
+                    string name = reader["name"].ToString();
+                    string translation = reader["translation"].ToString();
+                    string img_link = reader["img_link"].ToString();
+                    int repetition_num = Convert.ToInt32(reader["repetition_num"]);
 
-                Word word = Word.Create(word_id, name, translation, category_id, img_link, repetition_num);
+                    Word word = Word.Create(word_id, name, translation, category_id, img_link, repetition_num);
 
-                words.Add(word);
+                    words.Add(word);
                 }
             }
             catch (Exception ex)
@@ -84,8 +87,8 @@ namespace DotNetBack.Repositories
 
         public async Task<Response> DeleteWordAsync(int wordId)
         {
-            Response response = new Response(); 
-            
+            Response response = new Response();
+
             string sql = $"DELETE FROM Word WHERE word_id = {wordId}";
 
             var connection = GetConnection();
@@ -112,7 +115,7 @@ namespace DotNetBack.Repositories
 
                 await command.ExecuteNonQueryAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.StatusCode = 500;
                 response.Message = ex.Message;
@@ -127,7 +130,7 @@ namespace DotNetBack.Repositories
             string sql = "UPDATE Word SET " +
                          $"name = '{word.Name}', " +
                          $"translation = '{word.Translation}', " +
-                         $"category_id = { word.CategoryId}, " +
+                         $"category_id = {word.CategoryId}, " +
                          $"img_link = '{word.ImgLink}', " +
                          $"repetition_num = {word.RepetitionNum} " +
                          $"WHERE word_id = {word.WordId}";
@@ -170,10 +173,19 @@ namespace DotNetBack.Repositories
             {
                 await connection.OpenAsync();
 
+                // Fetch image URL from Google
+                string imageUrl = await GetImageUrlAsync(word.Name);
+                if (imageUrl == null)
+                {
+                    response.StatusCode = 500;
+                    response.Message = "Failed to fetch image URL from Google.";
+                    return response;
+                }
+
                 var command = connection.CreateCommand();
 
                 command.CommandText = "INSERT INTO Word (name, translation, category_id, img_link, repetition_num)" +
-                    $"VALUES ('{word.Name}', '{word.Translation}', {word.CategoryId}, '{word.ImgLink}', {word.RepetitionNum});  SELECT SCOPE_IDENTITY();";
+                    $"VALUES ('{word.Name}', '{word.Translation}', {word.CategoryId}, '{imageUrl}', {word.RepetitionNum});  SELECT SCOPE_IDENTITY();";
 
                 response.Data = Convert.ToInt32(await command.ExecuteScalarAsync());
             }
@@ -184,6 +196,33 @@ namespace DotNetBack.Repositories
                 response.StatusCode = 500;
             }
             return response;
+        }
+
+        public async Task<string> GetImageUrlAsync(string wordName)
+        {
+            var apiKey = _configuration["GoogleCustomSearch:ApiKey"];
+            var searchEngineId = _configuration["GoogleCustomSearch:SearchEngineId"];
+
+            var query = $"{wordName} image";
+            var url = $"https://www.googleapis.com/customsearch/v1?q={query}&cx={searchEngineId}&key={apiKey}&searchType=image";
+
+            try
+            {
+                var response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+
+                string imageUrl = data.items[0].link;
+                return imageUrl;
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                Console.WriteLine($"Error fetching image URL: {ex.Message}");
+                return null;
+            }
         }
     }
 }

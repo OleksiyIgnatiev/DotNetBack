@@ -40,12 +40,13 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IWordRepository, WordRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddHttpClient<WordRepository>();
 
 var app = builder.Build();
 
 app.UseRouting();
 
-// Додайте код CORS тут
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ CORS пїЅпїЅпїЅ
 app.UseCors(builder =>
 {
     builder
