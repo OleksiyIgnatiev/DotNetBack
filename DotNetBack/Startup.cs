@@ -15,12 +15,30 @@ public class Startup
 
         services.AddHttpContextAccessor();
 
+        services.AddDistributedMemoryCache();
+        services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30); // Время жизни сессии
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
+        services.AddSwaggerGen();
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IWordRepository, WordRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddSession();
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAllOrigins", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -28,6 +46,7 @@ public class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+            app.UseSwagger();
         }
         else
         {
@@ -35,7 +54,15 @@ public class Startup
             app.UseHsts();
         }
 
-        app.UseSession();
+        app.UseSession(); // Добавьте это
+        app.UseCors(builder =>
+        {
+            builder
+            .WithOrigins("http://localhost:3000", "http://localhost:5264") // my client app url
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+        });
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 

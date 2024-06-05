@@ -20,5 +20,6 @@ namespace DotNetBack.Repositories
         Task<Response> GetCalendarAsync(int userId);
         Task<Response> GetRecordAsync(int userId);
         Task<Response> GetUserInfoAsync(int userId);
+        Task<Response> GetUserByEmailAsync(string email);
     }
 }

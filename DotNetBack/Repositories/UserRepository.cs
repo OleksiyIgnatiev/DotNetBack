@@ -612,7 +612,7 @@ namespace DotNetBack.Repositories
             }
             return response;
         }
-        private async Task<Response> GetUserByEmailAsync(string email)
+        public async Task<Response> GetUserByEmailAsync(string email)
         {
             Response response = new Response();
             try
