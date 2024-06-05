@@ -9,6 +9,7 @@ namespace DotNetBack.Repositories
     {
         Task<Response> LoginAsync(string username, string passwordHash);
         Task<Response> RegisterAsync(string username, string email, string password);
+        Task<Response> ResetAsync(string email);
         Task<Response> UpdateNotificationAsync(int userId, string notificationType, DateTime notificationTime);
         Task<Response> UpdateUserAsync(int userId, string username, string email, string password);
         Task<Response> UpdateSubscriptionAsync(int userId, string subscription, DateTime subscriptionPeriod);

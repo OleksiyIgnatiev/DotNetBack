@@ -40,6 +40,17 @@ namespace DotNetBack.Controllers
             return Unauthorized(response);
         }
 
+        [HttpPost("reset")]
+        public async Task<IActionResult> Reset([FromBody] ResetRequest request)
+        {
+            Response response = await _userRepository.ResetAsync(request.email);
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+            }
+            return Unauthorized(response);
+        }
+
         [HttpPut("notification")]
         public async Task<IActionResult> UpdateNotification([FromBody] UpdateNotificationRequest request)
         {

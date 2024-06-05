@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using DotNetBack.Models;
 using DotNetBack.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DotNetBack.Repositories
 {
@@ -87,6 +91,84 @@ namespace DotNetBack.Repositories
             return true;
         }
 
+        private static string GenerateRandomPassword()
+        {
+            char[] Characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()".ToCharArray();
+            Random random = new Random();
+            int length = random.Next(10, 21);
+            StringBuilder password = new StringBuilder(length);
+
+            for (int i = 0; i < length; i++)
+            {
+                password.Append(Characters[random.Next(Characters.Length)]);
+            }
+
+            return password.ToString();
+        }
+
+        private void SendEmailToSupplier(string supplierEmail, string password, string username)
+        {
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("oleksandr.kolesnyk@nure.ua");
+                mail.To.Add(supplierEmail);
+
+                mail.Subject = "Password reset";
+
+                string text = $"Hello, {username}." +
+                    $"Your new password is {password}";
+                mail.Body = text;
+
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.Credentials = new NetworkCredential("oleksandr.kolesnyk@nure.ua", "");
+                    smtp.EnableSsl = true;
+
+                    smtp.Send(mail);
+                }
+            }
+        }
+
+
+        public async Task<Response> ResetAsync(string email)
+        {
+            string password = GenerateRandomPassword();
+            string username = "";
+
+            Response response = new Response();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    SqlCommand command = new SqlCommand("UPDATE Users SET password = @Password WHERE Email = @Email", connection);
+
+
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@Password", HashPassword(password));
+                    username = (string)await command.ExecuteScalarAsync();
+
+
+                    command = new SqlCommand("select username from Users where Email = @Email", connection);
+                    command.Parameters.AddWithValue("@Email", email);
+
+                    username = Convert.ToString(await command.ExecuteScalarAsync());
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+                return response;
+            }
+
+            SendEmailToSupplier(email, password, username);
+
+            return response;
+        }
+            
         public async Task<Response> LoginAsync(string username, string passwordHash)
         {
             Response response = new Response();
@@ -283,9 +365,6 @@ namespace DotNetBack.Repositories
             public List<Word> Words { get; set; }
         }
 
-
-
-
         public async Task<Response> UpdateNotificationAsync(int userId, string notificationType, DateTime notificationTime)
         {
             Response response = new Response();
@@ -324,7 +403,7 @@ namespace DotNetBack.Repositories
                         command.Parameters.AddWithValue("@userId", userId);
                         command.Parameters.AddWithValue("@username", username);
                         command.Parameters.AddWithValue("@Email", email);
-                        command.Parameters.AddWithValue("@Password", password);
+                        command.Parameters.AddWithValue("@Password", HashPassword(password));
                         await command.ExecuteNonQueryAsync();
                     }
                 }
@@ -518,8 +597,6 @@ namespace DotNetBack.Repositories
             }
             return response;
         }
-
-
 
         public async Task<Response> GetRecordAsync(int userId)
         {
