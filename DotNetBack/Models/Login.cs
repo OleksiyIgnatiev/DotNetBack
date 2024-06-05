@@ -2,8 +2,9 @@
 {
     public class Login
     {
-        public String LoginName { get; set; }
-        public string Password { get; set; }
+       public string role { get; set; }
+       public int userId { get; set; }
+       
     }
 }
 

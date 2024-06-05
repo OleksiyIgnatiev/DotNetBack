@@ -94,13 +94,39 @@ namespace DotNetBack.Repositories
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
-                    using (SqlCommand command = new SqlCommand("SELECT password FROM Users WHERE username = @username", connection))
+                    using (SqlCommand command = new SqlCommand("SELECT password, user_id, role FROM Users WHERE username = @username", connection))
                     {
                         command.Parameters.AddWithValue("@username", username);
-                        string result = (string)await command.ExecuteScalarAsync();
-                        response.Data = (VerifyHashedPassword(result, passwordHash));
-                        return response;
+
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                string password = reader["password"].ToString();
+                                int userId = Convert.ToInt32(reader["user_id"]);
+                                string role = reader["role"].ToString();
+
+                                if(!VerifyHashedPassword(password, passwordHash))
+                                {
+                                    response.Data = null;
+                                    response.StatusCode = 500;
+                                    response.Message = "Wrong password";
+                                    return response;
+                                }
+
+                                response.Data = new Login() {  userId = userId, role = role };
+
+                                return response;
+                            }
+                            else
+                            {
+                                // Handle case where no user is found
+                                response.Data = null;
+                                return response;
+                            }
+                        }
                     }
+
                 }
             }
             catch (Exception ex)
