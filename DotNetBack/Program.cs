@@ -74,5 +74,12 @@ app.UseAuthorization();
 app.UseSession();
 
 app.MapControllers();
-
+app.UseCors(builder =>
+{
+    builder
+    .WithOrigins("http://localhost:3000", "http://localhost:5264") // my client app url
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials();
+});
 app.Run();
