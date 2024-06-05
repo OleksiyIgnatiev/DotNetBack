@@ -94,7 +94,20 @@ namespace DotNetBack.Repositories
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
-                    using (SqlCommand command = new SqlCommand("SELECT password, user_id, role FROM Users WHERE username = @username", connection))
+
+                    SqlCommand command = new SqlCommand("SELECT Count(*) FROM Users WHERE username = @username", connection);
+
+                    int result = (int)await command.ExecuteScalarAsync();
+
+                    if (result == 0)
+                    {
+                        response.Data = null;
+                        response.StatusCode = 500;
+                        response.Message = "This username doesn`t exist";
+                        return response;
+                    }
+
+                    using (command = new SqlCommand("SELECT password, user_id, role FROM Users WHERE username = @username", connection))
                     {
                         command.Parameters.AddWithValue("@username", username);
 
