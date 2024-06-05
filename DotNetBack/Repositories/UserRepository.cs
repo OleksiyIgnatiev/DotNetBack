@@ -106,7 +106,7 @@ namespace DotNetBack.Repositories
             return password.ToString();
         }
 
-        private void SendEmailToSupplier(string supplierEmail, string password, string username)
+        private bool SendEmailToSupplier(string supplierEmail, string password, string username)
         {
             using (MailMessage mail = new MailMessage())
             {
@@ -121,12 +121,20 @@ namespace DotNetBack.Repositories
 
                 using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
                 {
-                    smtp.Credentials = new NetworkCredential("oleksandr.kolesnyk@nure.ua", "");
-                    smtp.EnableSsl = true;
+                    try
+                    {
+                        smtp.Credentials = new NetworkCredential("oleksandr.kolesnyk@nure.ua", "");
+                        smtp.EnableSsl = true;
 
-                    smtp.Send(mail);
+                        smtp.Send(mail);
+                    }
+                    catch
+                    {
+                        return false;
+                    }
                 }
             }
+            return true;
         }
 
 
@@ -141,7 +149,21 @@ namespace DotNetBack.Repositories
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
-                    SqlCommand command = new SqlCommand("UPDATE Users SET password = @Password WHERE Email = @Email", connection);
+
+
+                    SqlCommand command = new SqlCommand("select Count(*) from Users where Email = @Email", connection);
+                    command.Parameters.AddWithValue("@Email", email);
+
+                    int result = Convert.ToInt32(await command.ExecuteScalarAsync());
+
+                    if(result == 0)
+                    {
+                        response.StatusCode = 500;
+                        response.Message = $"There is no such account registered at email {email}";
+                        return response;
+                    }
+
+                    command = new SqlCommand("UPDATE Users SET password = @Password WHERE Email = @Email", connection);
 
 
                     command.Parameters.AddWithValue("@Email", email);
@@ -164,7 +186,11 @@ namespace DotNetBack.Repositories
                 return response;
             }
 
-            SendEmailToSupplier(email, password, username);
+            if(!SendEmailToSupplier(email, password, username))
+            {
+                response.StatusCode = 500;
+                response.Message = "Failed to send notification";
+            }
 
             return response;
         }
