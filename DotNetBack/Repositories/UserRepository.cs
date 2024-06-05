@@ -671,7 +671,7 @@ namespace DotNetBack.Repositories
             Response response = new Response();
             try
             {
-                string query = "SELECT id, role FROM Users WHERE email = @Email";
+                string query = "SELECT user_id, role FROM Users WHERE email = @Email";
 
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
@@ -690,7 +690,7 @@ namespace DotNetBack.Repositories
                                 // Зчитування значень з рядка результатів
                                 response.Data = new
                                 {
-                                    Id = Convert.ToInt32(reader["id"]),
+                                    Id = Convert.ToInt32(reader["user_id"]),
                                     Role = reader["role"].ToString()
                                 };
                             }

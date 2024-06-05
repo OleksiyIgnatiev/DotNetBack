@@ -22,8 +22,8 @@ namespace DotNetBack.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet("RedirectOnOAuthServer")]
-        public IActionResult RedirectOnOAuthServer()
+        [HttpGet("redirectOnOAuthServer")]
+        public string RedirectOnOAuthServer()
         {
             var codeVerifier = Guid.NewGuid().ToString();
 
@@ -33,7 +33,7 @@ namespace DotNetBack.Controllers
 
             var url = GoogleOAuthService.GenerateOAuthRequestUrl("openid email", RedirectUrl, codeChallenge);
 
-            return Redirect(url);
+            return url;
         }
 
         [HttpGet("Code")]
