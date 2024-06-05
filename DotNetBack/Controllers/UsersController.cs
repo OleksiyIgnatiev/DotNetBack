@@ -22,11 +22,11 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             Response response = await _userRepository.LoginAsync(request.Username, request.Password);
-            if (Response.StatusCode == 200)
+            if (response.StatusCode == 200)
             {
                 return Ok(response);
             }
-            return Unauthorized();
+            return Unauthorized(response);
         }
 
         [HttpPost("register")]

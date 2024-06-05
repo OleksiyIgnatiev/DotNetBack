@@ -96,6 +96,7 @@ namespace DotNetBack.Repositories
                     await connection.OpenAsync();
 
                     SqlCommand command = new SqlCommand("SELECT Count(*) FROM Users WHERE username = @username", connection);
+                    command.Parameters.AddWithValue("@username", username);
 
                     int result = (int)await command.ExecuteScalarAsync();
 
