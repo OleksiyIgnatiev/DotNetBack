@@ -33,7 +33,11 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             Response response = await _userRepository.RegisterAsync(request.Username, request.Email, request.Password);
-            return Ok(response);
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+            }
+            return Unauthorized(response);
         }
 
         [HttpPut("notification")]

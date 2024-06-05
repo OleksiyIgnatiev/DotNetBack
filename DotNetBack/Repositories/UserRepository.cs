@@ -170,8 +170,35 @@ namespace DotNetBack.Repositories
 
                 // Begin transaction
                 SqlTransaction transaction = connection.BeginTransaction();
+
+
+                    SqlCommand command = new SqlCommand($"select Count(*) from Users where username = '{username}'",
+                        connection, transaction);
+
+                    int count = Convert.ToInt32(await command.ExecuteScalarAsync());
+
+                    if (count != 0)
+                    {
+                        response.StatusCode = 500;
+                        response.Message = "This username is already picked";
+                        return response;
+                    }
+
+
+                    command = new SqlCommand($"select Count(*) from Users where email = '{email}'",
+                        connection, transaction);
+
+                    count = Convert.ToInt32(await command.ExecuteScalarAsync());
+
+                    if (count != 0)
+                    {
+                        response.StatusCode = 500;
+                        response.Message = "This email is already picked";
+                        return response;
+                    }
+
                     // Insert user into Users table
-                    using (SqlCommand command = new SqlCommand(
+                    using (command = new SqlCommand(
                         "INSERT INTO Users (username, email, password, notification_time, level, subscription, subscription_period, notification_type, role) " +
                         "VALUES (@username, @Email, @Password, @NotificationTime, @Level, @Subscription, @SubscriptionPeriod, @NotificationType, @Role); " +
                         "SELECT SCOPE_IDENTITY();",
