@@ -26,7 +26,11 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> GetUserCategories(int category_id)
         {
             Response words = await wordRepository.GetWordsAsync(category_id);
-            return Ok(words);
+            if (words.StatusCode == 200)
+            {
+                return Ok(words);
+            }
+            return StatusCode(words.StatusCode, words.Message);
         }
 
         [HttpPost]
@@ -38,21 +42,33 @@ namespace DotNetBack.Controllers
             }
 
             Response response = await wordRepository.AddWordAsync(word);
-            return Ok(response);
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+            }
+            return StatusCode(response.StatusCode, response.Message);
         }
 
         [HttpDelete("{word_id}")]
         public async Task<IActionResult> DeleteWord(int word_id)
         {
             Response response = await wordRepository.DeleteWordAsync(word_id);
-            return Ok(response);
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+            }
+            return StatusCode(response.StatusCode, response.Message);
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateWord(Word word)
         {
             Response response = await wordRepository.UpdateWordAsync(word);
-            return Ok(response);
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+            }
+            return StatusCode(response.StatusCode, response.Message);
         }
     }
 }
