@@ -42,7 +42,7 @@ namespace DotNetBack.Controllers
             }
 
             var categoryId = await _categoryRepository.AddCategoryAsync(category);
-            return Ok(new Response(201, "Category created successfully.", new { CategoryId = categoryId }));
+            return Ok(new Response(200, "Category created successfully.", new { CategoryId = categoryId }));
         }
 
         // PUT: /api/category
