@@ -2,28 +2,28 @@
   "categories": [
     {
       "CategoryId": 1,
-      "CategoryName": "анатомія",
+      "CategoryName": "anatomy",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 2,
-      "CategoryName": "археологія",
+      "CategoryName": "archaeology",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 3,
-      "CategoryName": "архітектура",
+      "CategoryName": "architecture",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 4,
-      "CategoryName": "базові дієслова",
+      "CategoryName": "basic verbs",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
@@ -37,266 +37,267 @@
     },
     {
       "CategoryId": 6,
-      "CategoryName": "зовнішність",
+      "CategoryName": "appearance",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 7,
-      "CategoryName": "Військова справа",
+      "CategoryName": "Military",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 8,
-      "CategoryName": "Пори року",
+      "CategoryName": "Seasons",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 9,
-      "CategoryName": "час",
+      "CategoryName": "time",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 10,
-      "CategoryName": "географія",
+      "CategoryName": "geography",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 11,
-      "CategoryName": "місто",
+      "CategoryName": "city",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 12,
-      "CategoryName": "гроші",
+      "CategoryName": "money",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 13,
-      "CategoryName": "дні тижня",
+      "CategoryName": "days of the week",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 14,
-      "CategoryName": "будинок",
+      "CategoryName": "house",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 15,
-      "CategoryName": "їжа",
+      "CategoryName": "food",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 16,
-      "CategoryName": "тварина",
+      "CategoryName": "animal",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 17,
-      "CategoryName": "здоров'я",
+      "CategoryName": "health",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 18,
-      "CategoryName": "знаки Зодіаку",
+      "CategoryName": "Zodiac Signs",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 19,
-      "CategoryName": "ідіоми",
+      "CategoryName": "idioms",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 20,
-      "CategoryName": "мистецтво",
+      "CategoryName": "art",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 21,
-      "CategoryName": "кар'єра",
+      "CategoryName": "career",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 22,
-      "CategoryName": "кіно",
+      "CategoryName": "cinema",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 23,
-      "CategoryName": "комп'ютер",
+      "CategoryName": "computer",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 24,
-      "CategoryName": "Космос",
+      "CategoryName": "Space",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 25,
-      "CategoryName": "література",
+      "CategoryName": "literature",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 26,
-      "CategoryName": "маркетинг",
+      "CategoryName": "marketing",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 27,
-      "CategoryName": "математика",
+      "CategoryName": "math",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 28,
-      "CategoryName": "меблі",
+      "CategoryName": "furniture",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 29,
-      "CategoryName": "місяця",
+      "CategoryName": "month",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 30,
-      "CategoryName": "музика",
+      "CategoryName": "music",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 31,
-      "CategoryName": "неправильні дієслова",
+      "CategoryName": "incorrect verbs",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 32,
-      "CategoryName": "одяг",
+      "CategoryName": "clothing",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 33,
-      "CategoryName": "політика",
+      "CategoryName": "policy",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
-      "CategoryId": 34,
-      "CategoryName": "психологія",
+      "CategoryId": 3,
+      4,
+      "CategoryName": "psychology",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 35,
-      "CategoryName": "подорожі",
+      "CategoryName": "travel",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 36,
-      "CategoryName": "сім'я",
+      "CategoryName": "family",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 37,
-      "CategoryName": "ЗМІ",
+      "CategoryName": "Media",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 38,
-      "CategoryName": "спорт",
+      "CategoryName": "sports",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 39,
-      "CategoryName": "хобі",
+      "CategoryName": "hobbies",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 40,
-      "CategoryName": "кольори",
+      "CategoryName": "colors",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 41,
-      "CategoryName": "екологія",
+      "CategoryName": "environment",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 42,
-      "CategoryName": "економіка",
+      "CategoryName": "economics",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 43,
-      "CategoryName": "юриспруденція",
+      "CategoryName": "jurisprudence",
       "UserId": 1,
       "CategoryLength": 0,
       "ProgressionPercentage": 0
