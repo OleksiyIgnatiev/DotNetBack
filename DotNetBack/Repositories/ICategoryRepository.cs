@@ -6,12 +6,12 @@ namespace DotNetBack.Repositories
 {
     public interface ICategoryRepository
     {
-        Task<List<Category>> GetUserCategoriesAsync(int user_id);
-        Task<List<Category>> FindCategoriesAsync(string query, int user_id);
-        Task<int> AddCategoryAsync(Category category);
-        Task UpdateCategoryAsync(Category category);
-        Task DeleteCategoryAsync(int category_id);
-        Task ResetProgressAsync(int category_id);
-        Task ClearContentAsync(int category_id);
+        Task<Response> GetUserCategoriesAsync(int user_id);
+        Task<Response> FindCategoriesAsync(string query, int user_id);
+        Task<Response> AddCategoryAsync(Category category);
+        Task<Response> UpdateCategoryAsync(Category category);
+        Task<Response> DeleteCategoryAsync(int category_id);
+        Task<Response> ResetProgressAsync(int category_id);
+        Task<Response> ClearContentAsync(int category_id);
     }
 }
