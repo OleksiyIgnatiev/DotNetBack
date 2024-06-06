@@ -168,45 +168,14 @@ namespace DotNetBack.Repositories
         {
             Response response = new Response();
             var connection = GetConnection();
-
             try
             {
                 await connection.OpenAsync();
 
-                string imageUrl = null;
-
-                // Check if the image path is provided
-                if (!string.IsNullOrEmpty(word.ImgLink) && !word.ImgLink.Equals("string", StringComparison.OrdinalIgnoreCase))
-                {
-                    // If the ImgLink is provided and not equal to "string", assume it's a local path
-                    string localImagePath = word.ImgLink;
-
-                    // Copy the image to the destination folder
-                    string destinationFolder = Path.Combine(Directory.GetCurrentDirectory(), "Services", "Images");
-                    string fileName = Path.GetFileName(localImagePath);
-                    string destinationPath = Path.Combine(destinationFolder, fileName);
-
-                    File.Copy(localImagePath, destinationPath, true);
-
-                    // Update imageUrl to point to the copied image
-                    imageUrl = $"~/Services/Images/{fileName}";
-                }
-                else
-                {
-                    // Fetch image URL from Google if ImgLink is not provided or is "string"
-                    imageUrl = await GetImageUrlAsync(word.Name);
-                    if (imageUrl == null)
-                    {
-                        response.StatusCode = 500;
-                        response.Message = "Failed to fetch image URL from Google.";
-                        return response;
-                    }
-                }
-
                 var command = connection.CreateCommand();
 
                 command.CommandText = "INSERT INTO Word (name, translation, category_id, img_link, repetition_num)" +
-                    $"VALUES ('{word.Name}', '{word.Translation}', {word.CategoryId}, '{imageUrl}', {word.RepetitionNum}); SELECT SCOPE_IDENTITY();";
+                    $"VALUES ('{word.Name}', '{word.Translation}', {word.CategoryId}, '{word.ImgLink}', {word.RepetitionNum});  SELECT SCOPE_IDENTITY();";
 
                 response.Data = Convert.ToInt32(await command.ExecuteScalarAsync());
             }
@@ -248,65 +217,4 @@ namespace DotNetBack.Repositories
         }
     }
 }
-//Смотри ниже Я приведу метод который на основе названия нашего слова генерирует ссылку Google картинки и вставляют в свойства Image Link в нашей базе данных Мне нужно чтобы ты переделывал немного этот метод чтобы мы туда писали путь к нашей картинке который находится у нас в проводнике оно загружало его в папку Services/Images нашего проекта и после вставил сылку на картинку в наше свойство Image Link. А в случае если он ничего не загрузил и нам передано NULL или "string" Тогда нужно использовать метод который мы уже имеем с генерацией ссылки Google 
 
-//public async Task<Response> AddWordAsync(Word word)
-//{
-//    Response response = new Response();
-//    var connection = GetConnection();
-
-//    try
-//    {
-//        await connection.OpenAsync();
-
-//        // Fetch image URL from Google
-//        string imageUrl = await GetImageUrlAsync(word.Name);
-//        if (imageUrl == null)
-//        {
-//            response.StatusCode = 500;
-//            response.Message = "Failed to fetch image URL from Google.";
-//            return response;
-//        }
-
-//        var command = connection.CreateCommand();
-
-//        command.CommandText = "INSERT INTO Word (name, translation, category_id, img_link, repetition_num)" +
-//            $"VALUES ('{word.Name}', '{word.Translation}', {word.CategoryId}, '{imageUrl}', {word.RepetitionNum});  SELECT SCOPE_IDENTITY();";
-
-//        response.Data = Convert.ToInt32(await command.ExecuteScalarAsync());
-//    }
-//    catch (Exception ex)
-//    {
-//        response.Data = 0;
-//        response.Message = ex.Message;
-//        response.StatusCode = 500;
-//    }
-//    return response;
-//}
-
-//public async Task<string> GetImageUrlAsync(string wordName)
-//{
-//    var apiKey = _configuration["GoogleCustomSearch:ApiKey"];
-//    var searchEngineId = _configuration["GoogleCustomSearch:SearchEngineId"];
-
-//    var query = $"{wordName} image";
-//    var url = $"https://www.googleapis.com/customsearch/v1?q={query}&cx={searchEngineId}&key={apiKey}&searchType=image";
-
-//    try
-//    {
-//        var response = await _httpClient.GetAsync(url);
-//        response.EnsureSuccessStatusCode();
-
-//        var json = await response.Content.ReadAsStringAsync();
-//        dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-
-//        string imageUrl = data.items[0].link;
-//        return imageUrl;
-//    }
-//    catch (Exception ex)
-//    {
-//        // Handle exception
-//        Console.WriteLine($"Error fetching image URL: {ex.Message}");
-//        return null;
-//    }
-//}

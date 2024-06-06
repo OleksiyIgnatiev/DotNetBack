@@ -70,6 +70,23 @@ namespace DotNetBack.Controllers
             }
             return StatusCode(response.StatusCode, response.Message);
         }
+
+        [HttpGet("image/{wordName}")]
+        public async Task<IActionResult> GenerateImage(string wordName)
+        {
+            string imageUrl = await wordRepository.GetImageUrlAsync(wordName);
+
+            if (imageUrl != null)
+            {
+                // Вернуть URL изображения в виде ответа
+                return Ok(imageUrl);
+            }
+            else
+            {
+                // В случае ошибки или отсутствия изображения вернуть сообщение об ошибке
+                return NotFound("Изображение для данного слова не найдено.");
+            }
+        }
     }
 }
 

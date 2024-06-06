@@ -81,5 +81,7 @@ namespace DotNetBack.Controllers
             await _categoryRepository.ClearContentAsync(category_id);
             return Ok(new Response(200, "Category content cleared successfully."));
         }
+
+        
     }
 }
