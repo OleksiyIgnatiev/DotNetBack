@@ -23,7 +23,7 @@ namespace DotNetBack.Controllers
             var categories = await _categoryRepository.GetUserCategoriesAsync(user_id);
             if (categories.StatusCode == 200) 
             {
-                return Ok(new Response(200, "Categories retrieved successfully.", categories));
+                return Ok(categories);
             }
             return StatusCode(categories.StatusCode, categories.Message);
         }
@@ -35,7 +35,7 @@ namespace DotNetBack.Controllers
             var categories = await _categoryRepository.FindCategoriesAsync(query, user_id);
             if (categories.StatusCode == 200)
             {
-                return Ok(new Response(200, "Categories found successfully.", categories));
+                return Ok(categories);
             }
             return StatusCode(categories.StatusCode, categories.Message);
         }
@@ -52,7 +52,7 @@ namespace DotNetBack.Controllers
             var categoryId = await _categoryRepository.AddCategoryAsync(category);
             if (categoryId.StatusCode == 200)
             {
-                return Ok(new Response(200, "Category created successfully.", new { CategoryId = categoryId }));
+                return Ok(categoryId);
             }
             return StatusCode(categoryId.StatusCode, categoryId.Message);
         }
@@ -81,7 +81,7 @@ namespace DotNetBack.Controllers
             var response = await _categoryRepository.DeleteCategoryAsync(category_id);
             if (response.StatusCode == 200)
             {
-                return Ok(new Response(200, "Category deleted successfully."));
+                return Ok("Category deleted successfully.");
             }
             return StatusCode(response.StatusCode, response.Message);
         }
@@ -93,7 +93,7 @@ namespace DotNetBack.Controllers
             var response = await _categoryRepository.ResetProgressAsync(category_id);
             if (response.StatusCode == 200)
             {
-                return Ok(new Response(200, "Category progress reset successfully."));
+                return Ok("Category progress reset successfully.");
             }
             return StatusCode(response.StatusCode, response.Message);
         }
@@ -103,9 +103,10 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> ClearContent(int category_id)
         {
             var response = await _categoryRepository.ClearContentAsync(category_id);
+
             if (response.StatusCode == 200)
             {
-                return Ok(new Response(200, "Category content cleared successfully."));
+                return Ok("Category content cleared successfully.");
             }
             return StatusCode(response.StatusCode, response.Message);
         }
