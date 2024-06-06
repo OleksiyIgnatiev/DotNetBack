@@ -34,6 +34,7 @@ namespace DotNetBack.Repositories
                     SELECT 
                         c.category_name,
                         COUNT(w.word_id) AS category_length,
+                        c.category_id,
                         COALESCE(SUM(CASE WHEN w.repetition_num > 20 THEN 1 ELSE 0 END) * 100.0 / NULLIF(COUNT(w.word_id), 0), 0) AS progression_percentage
                     FROM Category c
                     LEFT JOIN Word w ON c.category_id = w.category_id
@@ -49,6 +50,7 @@ namespace DotNetBack.Repositories
                             var categoryProgress = new Category
                             {
                                 CategoryName = reader.GetString(reader.GetOrdinal("category_name")),
+                                CategoryId = reader.GetInt32(reader.GetOrdinal("category_id")),
                                 CategoryLength = reader.GetInt32(reader.GetOrdinal("category_length")),
                                 ProgressionPercentage = reader.IsDBNull(reader.GetOrdinal("progression_percentage"))
                                                         ? 0
