@@ -11,18 +11,18 @@ namespace DotNetBack.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class GoogleOAuthController : ControllerBase
+    public class authController : ControllerBase
     {
-        private const string RedirectUrl = "http://localhost:5264/api/GoogleOAuth/Code";
+        private const string RedirectUrl = "http://localhost:5264/api/auth/code";
         private const string PkceSessionKey = "codeVerifier";
         private readonly IUserRepository _userRepository;
 
-        public GoogleOAuthController(IUserRepository userRepository)
+        public authController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        [HttpGet("redirectOnOAuthServer")]
+        [HttpGet("redirect")]
         public string RedirectOnOAuthServer()
         {
             var codeVerifier = Guid.NewGuid().ToString();
@@ -36,7 +36,7 @@ namespace DotNetBack.Controllers
             return url;
         }
 
-        [HttpGet("Code")]
+        [HttpGet("code")]
         public async Task<IActionResult> CodeAsync(string code)
         {
             string codeVerifier = HttpContext.Session.GetString(PkceSessionKey);
