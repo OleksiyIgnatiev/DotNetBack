@@ -175,7 +175,7 @@ namespace DotNetBack.Repositories
                 var command = connection.CreateCommand();
 
                 command.CommandText = "INSERT INTO Word (name, translation, category_id, img_link, repetition_num)" +
-                    $"VALUES ('{word.Name}', '{word.Translation}', {word.CategoryId}, '{word.ImgLink}', {word.RepetitionNum});  SELECT SCOPE_IDENTITY();";
+                    $"VALUES (N'{word.Name}', N'{word.Translation}', {word.CategoryId}, N'{word.ImgLink}', {word.RepetitionNum});  SELECT SCOPE_IDENTITY();";
 
                 response.Data = Convert.ToInt32(await command.ExecuteScalarAsync());
             }
