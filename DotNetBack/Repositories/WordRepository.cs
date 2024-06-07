@@ -48,16 +48,6 @@ namespace DotNetBack.Repositories
                 command.Parameters.AddWithValue("@category_id", category_id);
 
                 var commandCheck = connection.CreateCommand();
-                commandCheck.CommandText = $"Select Count(*) FROM Word WHERE category_id = {category_id}";
-                int result = (int)await commandCheck.ExecuteScalarAsync();
-
-                if (result == 0)
-                {
-
-                    response.StatusCode = 500;
-                    response.Message = "There are no words in this category";
-                    return response;
-                }
 
 
                 var reader = await command.ExecuteReaderAsync();
