@@ -2,303 +2,23 @@
   "categories": [
     {
       "CategoryId": 1,
-      "CategoryName": "anatomy",
+      "CategoryName": "basic verbs",
       "UserId": 1,
-      "CategoryLength": 0,
+      "CategoryLength": 20,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 2,
-      "CategoryName": "archaeology",
+      "CategoryName": "house",
       "UserId": 1,
-      "CategoryLength": 0,
+      "CategoryLength": 20,
       "ProgressionPercentage": 0
     },
     {
       "CategoryId": 3,
-      "CategoryName": "architecture",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 4,
-      "CategoryName": "basic verbs",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 5,
-      "CategoryName": "Business",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 6,
-      "CategoryName": "appearance",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 7,
-      "CategoryName": "Military",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 8,
-      "CategoryName": "Seasons",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 9,
       "CategoryName": "time",
       "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 10,
-      "CategoryName": "geography",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 11,
-      "CategoryName": "city",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 12,
-      "CategoryName": "money",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 13,
-      "CategoryName": "days of the week",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 14,
-      "CategoryName": "house",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 15,
-      "CategoryName": "food",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 16,
-      "CategoryName": "animal",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 17,
-      "CategoryName": "health",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 18,
-      "CategoryName": "Zodiac Signs",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 19,
-      "CategoryName": "idioms",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 20,
-      "CategoryName": "art",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 21,
-      "CategoryName": "career",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 22,
-      "CategoryName": "cinema",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 23,
-      "CategoryName": "computer",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 24,
-      "CategoryName": "Space",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 25,
-      "CategoryName": "literature",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 26,
-      "CategoryName": "marketing",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 27,
-      "CategoryName": "math",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 28,
-      "CategoryName": "furniture",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 29,
-      "CategoryName": "month",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 30,
-      "CategoryName": "music",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 31,
-      "CategoryName": "incorrect verbs",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 32,
-      "CategoryName": "clothing",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 33,
-      "CategoryName": "policy",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 34,
-      "CategoryName": "psychology",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 35,
-      "CategoryName": "travel",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 36,
-      "CategoryName": "family",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 37,
-      "CategoryName": "Media",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 38,
-      "CategoryName": "sports",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 39,
-      "CategoryName": "hobbies",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 40,
-      "CategoryName": "colors",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 41,
-      "CategoryName": "environment",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 42,
-      "CategoryName": "economics",
-      "UserId": 1,
-      "CategoryLength": 0,
-      "ProgressionPercentage": 0
-    },
-    {
-      "CategoryId": 43,
-      "CategoryName": "jurisprudence",
-      "UserId": 1,
-      "CategoryLength": 0,
+      "CategoryLength": 20,
       "ProgressionPercentage": 0
     }
   ],
@@ -569,138 +289,26 @@
     },
     {
       "WordId": 34,
-      "Name": "Blood",
-      "Translation": "Кров",
+      "Name": "Verb",
+      "Translation": "Дієслово",
       "CategoryId": 1,
       "ImgLink": "link_to_image_34.jpg",
       "RepetitionNum": 0
     },
     {
       "WordId": 35,
-      "Name": "Vein",
-      "Translation": "Вена",
-      "CategoryId": 1,
+      "Name": "House",
+      "Translation": "Будинок",
+      "CategoryId": 2,
       "ImgLink": "link_to_image_35.jpg",
       "RepetitionNum": 0
     },
     {
       "WordId": 36,
-      "Name": "Artery",
-      "Translation": "Артерія",
-      "CategoryId": 1,
+      "Name": "Time",
+      "Translation": "Час",
+      "CategoryId": 3,
       "ImgLink": "link_to_image_36.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 37,
-      "Name": "Nerve",
-      "Translation": "Нерв",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_37.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 38,
-      "Name": "Larynx",
-      "Translation": "Гортань",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_38.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 39,
-      "Name": "Pharynx",
-      "Translation": "Глотка",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_39.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 40,
-      "Name": "Esophagus",
-      "Translation": "Стравохід",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_40.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 41,
-      "Name": "Trachea",
-      "Translation": "Трахея",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_41.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 42,
-      "Name": "Bladder",
-      "Translation": "Сечовий міхур",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_42.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 43,
-      "Name": "Urethra",
-      "Translation": "Сечовипускальний канал",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_43.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 44,
-      "Name": "Pancreas",
-      "Translation": "Підшлункова залоза",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_44.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 45,
-      "Name": "Spleen",
-      "Translation": "Селезінка",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_45.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 46,
-      "Name": "Gallbladder",
-      "Translation": "Жовчний міхур",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_46.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 47,
-      "Name": "Thyroid",
-      "Translation": "Щитовидна залоза",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_47.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 48,
-      "Name": "Pituitary gland",
-      "Translation": "Гіпофіз",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_48.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 49,
-      "Name": "Adrenal gland",
-      "Translation": "Надниркова залоза",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_49.jpg",
-      "RepetitionNum": 0
-    },
-    {
-      "WordId": 50,
-      "Name": "Appendix",
-      "Translation": "Апендикс",
-      "CategoryId": 1,
-      "ImgLink": "link_to_image_50.jpg",
       "RepetitionNum": 0
     }
   ]
