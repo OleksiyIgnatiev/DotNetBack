@@ -7,11 +7,11 @@ namespace DotNetBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class categoryController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public categoryController(ICategoryRepository categoryRepository)
+        public CategoryController(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
@@ -21,7 +21,7 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> GetUserCategories(int user_id)
         {
             var categories = await _categoryRepository.GetUserCategoriesAsync(user_id);
-            if (categories.StatusCode == 200) 
+            if (categories.StatusCode == 200)
             {
                 return Ok(categories);
             }
@@ -111,6 +111,6 @@ namespace DotNetBack.Controllers
             return StatusCode(response.StatusCode, response.Message);
         }
 
-        
+
     }
 }
