@@ -6,7 +6,7 @@ namespace DotNetBack.Repositories
 {
     public interface IMessageRepository
     {
-        Task<int> CreateMessageAsync(Message message);
-        Task<List<Message>> GetUnreadMessagesAsync(int userId);
+        Task<Response> CreateMessageAsync(Message message);
+        Task<Response> GetUnreadMessagesAsync(int userId);
     }
 }

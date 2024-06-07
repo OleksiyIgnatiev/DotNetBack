@@ -35,8 +35,7 @@ namespace DotNetBack.Models
         [Required]
         public int CategoryId { get;  set; }
 
-        [Required]
-        public string ImgLink { get;  set; }
+        public string? ImgLink { get; set; }
 
         [Required]
         public int RepetitionNum { get;  set; }

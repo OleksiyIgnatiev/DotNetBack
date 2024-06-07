@@ -55,21 +55,33 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> UpdateNotification([FromBody] UpdateNotificationRequest request)
         {
             Response response = await _userRepository.UpdateNotificationAsync(request.UserId, request.NotificationType, request.NotificationTime);
-            return Ok(response);
+            if (response.StatusCode == 200) 
+            {
+                return Ok(response);
+            }
+            return StatusCode(response.StatusCode, response.Message);
         }
 
         [HttpPut("change")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
         {
             Response response = await _userRepository.UpdateUserAsync(request.UserId, request.Username, request.Email, request.Password);
-            return Ok(response);
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+            }
+            return StatusCode(response.StatusCode, response.Message);
         }
 
         [HttpPut("subscription")]
         public async Task<IActionResult> UpdateSubscription([FromBody] UpdateSubscriptionRequest request)
         {
             Response response = await _userRepository.UpdateSubscriptionAsync(request.UserId, request.Subscription, request.SubscriptionPeriod);
-            return Ok(response);
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+            }
+            return StatusCode(response.StatusCode, response.Message);
         }
 
         //[HttpDelete("logout")]
@@ -83,14 +95,22 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             Response users = await _userRepository.GetAllUsersAsync();
-            return Ok(users);
+            if (users.StatusCode == 200)
+            {
+                return Ok(users);
+            }
+            return StatusCode(users.StatusCode, users.Message);
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int userId)
         {
             Response response = await _userRepository.DeleteUserAsync(userId);
-            return Ok(response);
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+            }
+            return StatusCode(response.StatusCode, response.Message);
         }
 
         //[HttpPut("share-successes")]
@@ -104,21 +124,33 @@ namespace DotNetBack.Controllers
         public async Task<IActionResult> GetCalendar(int userId)
         {
             Response calendar = await _userRepository.GetCalendarAsync(userId);
-            return Ok(calendar);
+            if (calendar.StatusCode == 200)
+            {
+                return Ok(calendar);
+            }
+            return StatusCode(calendar.StatusCode, calendar.Message);
         }
 
         [HttpGet("record/{userId}")]
         public async Task<IActionResult> GetRecord(int userId)
         {
             Response record = await _userRepository.GetRecordAsync(userId);
-            return Ok(record);
+            if (record.StatusCode == 200)
+            {
+                return Ok(record);
+            }
+            return StatusCode(record.StatusCode, record.Message);
         }
 
         [HttpGet("info/{userId}")]
         public async Task<IActionResult> GetUserInfo(int userId)
         {
             Response userInfo = await _userRepository.GetUserInfoAsync(userId);
-            return Ok(userInfo);
+            if (userInfo.StatusCode == 200)
+            {
+                return Ok(userInfo);
+            }
+            return StatusCode(userInfo.StatusCode, userInfo.Message);
         }
     }
 }

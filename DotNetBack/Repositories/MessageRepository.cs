@@ -16,27 +16,40 @@ namespace DotNetBack.Repositories
             _configuration = configuration;
         }
 
-        public async Task<int> CreateMessageAsync(Message message)
+        public async Task<Response> CreateMessageAsync(Message message)
         {
-            string connectionString = _configuration.GetConnectionString("ppDBCon");
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            Response response = new Response();
+            try
             {
-                await connection.OpenAsync();
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO Message (user_id, message, admin_id, is_shown) VALUES (@userId, @message, @adminId, @isShown)", connection))
+                string connectionString = _configuration.GetConnectionString("ppDBCon");
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@userId", message.UserId);
-                    cmd.Parameters.AddWithValue("@message", message.Text);
-                    cmd.Parameters.AddWithValue("@adminId", message.AdminId);
-                    cmd.Parameters.AddWithValue("@isShown", false);
+                    await connection.OpenAsync();
+                    using (SqlCommand cmd = new SqlCommand("INSERT INTO Message (user_id, message, admin_id, is_shown) VALUES (@userId, @message, @adminId, @isShown)", connection))
+                    {
+                        cmd.Parameters.AddWithValue("@userId", message.UserId);
+                        cmd.Parameters.AddWithValue("@message", message.Text);
+                        cmd.Parameters.AddWithValue("@adminId", message.AdminId);
+                        cmd.Parameters.AddWithValue("@isShown", false);
 
-                    return await cmd.ExecuteNonQueryAsync();
+                        response.Data = await cmd.ExecuteNonQueryAsync();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
 
-        public async Task<List<Message>> GetUnreadMessagesAsync(int userId)
+        public async Task<Response> GetUnreadMessagesAsync(int userId)
         {
+            Response response = new Response();
+            try
+            {
             List<Message> messages = new List<Message>();
             string connectionString = _configuration.GetConnectionString("ppDBCon");
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -59,8 +72,15 @@ namespace DotNetBack.Repositories
                         }
                     }
                 }
+                response.Data = messages;
             }
-            return messages;
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = 500;
+                response.Message = ex.Message;
+            }
+            return response;
         }
     }
 }
