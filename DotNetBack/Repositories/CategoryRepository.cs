@@ -223,8 +223,7 @@ namespace DotNetBack.Repositories
                         command.CommandText = @"
                         UPDATE Word 
                         SET 
-                            repetition_num = 0,
-                            repetition_date = GETDATE()
+                            repetition_num = 0
                         WHERE 
                             category_id = @CategoryId";
                         command.Parameters.AddWithValue("@CategoryId", category_id);
