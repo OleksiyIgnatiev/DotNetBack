@@ -87,6 +87,24 @@ namespace DotNetBack.Controllers
                 return NotFound("Изображение для данного слова не найдено.");
             }
         }
+
+        // PUT: api/word/relized/{wordId}
+        [HttpPut("realized/{wordId}")]
+        public async Task<IActionResult> RealizeWord(int wordId)
+        {
+            // Вызов метода из репозитория
+            Response response = await wordRepository.RealizeWordAsync(wordId);
+
+            // Обработка ответа
+            if (response.StatusCode == 200)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return StatusCode(response.StatusCode, response.Message);
+            }
+        }
     }
 }
 

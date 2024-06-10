@@ -205,6 +205,44 @@ namespace DotNetBack.Repositories
                 return null;
             }
         }
+
+        public async Task<Response> RealizeWordAsync(int wordId)
+        {
+            Response response = new Response();
+            var connection = GetConnection();
+            try
+            {
+                await connection.OpenAsync();
+
+                var command = connection.CreateCommand();
+                command.CommandText = "UPDATE Word SET repetition_num = repetition_num + 1 WHERE word_id = @wordId;";
+                command.Parameters.AddWithValue("@wordId", wordId);
+
+                int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                if (rowsAffected > 0)
+                {
+                    response.StatusCode = 200;
+                    response.Message = "Repetition number incremented successfully.";
+                }
+                else
+                {
+                    response.StatusCode = 404;
+                    response.Message = "Word not found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.StatusCode = 500;
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+            return response;
+        }
+
     }
 }
 

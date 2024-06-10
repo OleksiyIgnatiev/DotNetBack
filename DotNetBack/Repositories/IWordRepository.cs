@@ -12,6 +12,8 @@ namespace DotNetBack.Repositories
 
         Task<Response> UpdateWordAsync(Word word);
         Task<string> GetImageUrlAsync(string wordName);
+
+        Task<Response> RealizeWordAsync(int wordId);
     }
 }
  
