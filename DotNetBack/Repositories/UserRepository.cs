@@ -480,7 +480,7 @@ namespace DotNetBack.Repositories
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
-                    using (SqlCommand command = new SqlCommand("SELECT user_id, username, email, password FROM Users", connection))
+                    using (SqlCommand command = new SqlCommand("SELECT user_id, username, email, password FROM Users WHERE role = 'user'", connection))
                     {
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
